@@ -1,0 +1,860 @@
+{
+  "meals": [
+    {
+      "meal_id": "MEAL_001",
+      "name_en": "Roti (2pcs) with Mixed Vegetable Curry",
+      "name_bn": "মিক্সড ভেজিটেবল কারি দিয়ে রুটি (২টি)",
+      "meal_type": ["Breakfast", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_003", "quantity": 70, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_015", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_033", "quantity": 2, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 362,
+        "protein_g": 10.7,
+        "carbs_g": 66,
+        "fat_g": 6.5,
+        "sodium_mg": 800,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 12.38,
+      "tags": ["vegetarian", "low_cost", "diabetic_friendly", "common_household"]
+    },
+    {
+      "meal_id": "MEAL_002",
+      "name_en": "Rice with Masoor Dal & Egg Bhuna",
+      "name_bn": "মসুর ডাল ও ডিম ভুনা দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 30,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_004", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_030", "quantity": 1, "unit": "pcs" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_034", "quantity": 2, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 637,
+        "protein_g": 24.8,
+        "carbs_g": 99.5,
+        "fat_g": 16.5,
+        "sodium_mg": 1200,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 33.16,
+      "tags": ["common_household", "budget_friendly", "high_protein"]
+    },
+    {
+      "meal_id": "MEAL_003",
+      "name_en": "Rice with Rui Fish Curry & Lal Shak Bhaji",
+      "name_bn": "রুই মাছের ঝোল ও লাল শাক ভাজি দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 40,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_026", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_017", "quantity": 0.5, "unit": "bundle" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 534,
+        "protein_g": 28.1,
+        "carbs_g": 75.5,
+        "fat_g": 14.5,
+        "sodium_mg": 1200,
+        "sugar_g": 6
+      },
+      "total_cost_bdt": 64.21,
+      "tags": ["local_fish", "common_household", "hypertension_moderate"]
+    },
+    {
+      "meal_id": "MEAL_004",
+      "name_en": "Chicken Khichuri",
+      "name_bn": "চিকেন খিচুড়ি",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 45,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_005", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_023", "quantity": 70, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_009", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 522,
+        "protein_g": 34.7,
+        "carbs_g": 65.5,
+        "fat_g": 13.7,
+        "sodium_mg": 1200,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 36.76,
+      "tags": ["high_protein", "one_pot_meal", "comfort_food"]
+    },
+    {
+      "meal_id": "MEAL_005",
+      "name_en": "Lau (Bottle Gourd) with Shrimp Curry & Rice",
+      "name_bn": "লাউ চিংড়ি ও ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 35,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_019", "quantity": 0.2, "unit": "piece" },
+        { "ingredient_id": "ING_029", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 420,
+        "protein_g": 19.5,
+        "carbs_g": 73,
+        "fat_g": 6.5,
+        "sodium_mg": 800,
+        "sugar_g": 7
+      },
+      "total_cost_bdt": 66.93,
+      "tags": ["light_meal", "diabetic_friendly", "hypertension_friendly"]
+    },
+    {
+      "meal_id": "MEAL_006",
+      "name_en": "Plain Yogurt with Banana",
+      "name_bn": "কলা দিয়ে টক দই",
+      "meal_type": ["Breakfast", "Snack"],
+      "prep_time_min": 3,
+      "ingredients": [
+        { "ingredient_id": "ING_032", "quantity": 150, "unit": "g" },
+        { "ingredient_id": "ING_040", "quantity": 1, "unit": "pcs" }
+      ],
+      "total_nutrition": {
+        "calories": 179,
+        "protein_g": 6.1,
+        "carbs_g": 30,
+        "fat_g": 5.3,
+        "sodium_mg": 60,
+        "sugar_g": 18
+      },
+      "total_cost_bdt": 33.50,
+      "tags": ["quick_meal", "probiotic", "snack", "no_cook"]
+    },
+    {
+      "meal_id": "MEAL_007",
+      "name_en": "Boiled Egg (1 pc)",
+      "name_bn": "সিদ্ধ ডিম (১টি)",
+      "meal_type": ["Breakfast", "Snack"],
+      "prep_time_min": 10,
+      "ingredients": [
+        { "ingredient_id": "ING_030", "quantity": 1, "unit": "pcs" }
+      ],
+      "total_nutrition": {
+        "calories": 70,
+        "protein_g": 6,
+        "carbs_g": 0.5,
+        "fat_g": 5,
+        "sodium_mg": 65,
+        "sugar_g": 0.5
+      },
+      "total_cost_bdt": 13.00,
+      "tags": ["snack", "high_protein", "low_carb", "low_cost"]
+    },
+    {
+      "meal_id": "MEAL_008",
+      "name_en": "Panta Bhat with Onion & Chili",
+      "name_bn": "পান্তা ভাত (পিঁয়াজ ও মরিচ দিয়ে)",
+      "meal_type": ["Breakfast"],
+      "prep_time_min": 5,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 360,
+        "protein_g": 7.3,
+        "carbs_g": 80.5,
+        "fat_g": 0.6,
+        "sodium_mg": 800,
+        "sugar_g": 3
+      },
+      "total_cost_bdt": 11.08,
+      "tags": ["low_cost", "traditional", "summer_meal"]
+    },
+    {
+      "meal_id": "MEAL_009",
+      "name_en": "Beef Bhuna with Paratha (2 pcs)",
+      "name_bn": "বিফ ভুনা ও পরোটা (২টি)",
+      "meal_type": ["Breakfast", "Dinner"],
+      "prep_time_min": 60,
+      "ingredients": [
+        { "ingredient_id": "ING_024", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_003", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 20, "unit": "ml" },
+        { "ingredient_id": "ING_007", "quantity": 40, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_009", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_036", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 767,
+        "protein_g": 36.8,
+        "carbs_g": 69.5,
+        "fat_g": 37.2,
+        "sodium_mg": 1600,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 90.79,
+      "tags": ["high_calorie", "high_protein", "traditional_rich"]
+    },
+    {
+      "meal_id": "MEAL_010",
+      "name_en": "Chicken Curry with Potato & Rice",
+      "name_bn": "আলু দিয়ে মুরগির ঝোল ও ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 45,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_023", "quantity": 120, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 568,
+        "protein_g": 32.8,
+        "carbs_g": 78,
+        "fat_g": 14,
+        "sodium_mg": 1200,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 50.16,
+      "tags": ["common_household", "high_protein", "budget_friendly"]
+    },
+    {
+      "meal_id": "MEAL_011",
+      "name_en": "Vegetable Khichuri",
+      "name_bn": "সবজি খিচুড়ি",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 35,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_005", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_020", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_021", "quantity": 0.05, "unit": "piece" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 431,
+        "protein_g": 13.7,
+        "carbs_g": 70.8,
+        "fat_g": 11.3,
+        "sodium_mg": 1200,
+        "sugar_g": 8
+      },
+      "total_cost_bdt": 17.41,
+      "tags": ["vegetarian", "low_cost", "one_pot_meal", "diabetic_friendly"]
+    },
+    {
+      "meal_id": "MEAL_012",
+      "name_en": "Omelette (2 eggs) with Roti (2 pcs)",
+      "name_bn": "ডিম আমলেট (২টি) ও রুটি (২টি)",
+      "meal_type": ["Breakfast", "Dinner"],
+      "prep_time_min": 15,
+      "ingredients": [
+        { "ingredient_id": "ING_003", "quantity": 70, "unit": "g" },
+        { "ingredient_id": "ING_030", "quantity": 2, "unit": "pcs" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 440,
+        "protein_g": 20.3,
+        "carbs_g": 53.5,
+        "fat_g": 16,
+        "sodium_mg": 800,
+        "sugar_g": 3
+      },
+      "total_cost_bdt": 33.73,
+      "tags": ["high_protein", "quick_meal", "common_household"]
+    },
+    {
+      "meal_id": "MEAL_013",
+      "name_en": "Rice with Aloo Bhorta & Masoor Dal",
+      "name_bn": "আলু ভর্তা ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 25, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 680,
+        "protein_g": 23.7,
+        "carbs_g": 120,
+        "fat_g": 11.8,
+        "sodium_mg": 1600,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 25.71,
+      "tags": ["low_cost", "vegetarian", "comfort_food", "traditional", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_014",
+      "name_en": "Rice with Begun Bhaja & Masoor Dal",
+      "name_bn": "বেগুন ভাজা ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_013", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 20, "unit": "ml" },
+        { "ingredient_id": "ING_033", "quantity": 2, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 15, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 721,
+        "protein_g": 22.8,
+        "carbs_g": 109,
+        "fat_g": 22.2,
+        "sodium_mg": 1600,
+        "sugar_g": 7
+      },
+      "total_cost_bdt": 31.65,
+      "tags": ["low_cost", "vegetarian", "quick_meal", "high_fat", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_015",
+      "name_en": "Pui Shak with Shrimp & Rice",
+      "name_bn": " পুঁই শাক চিংড়ি ও ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_018", "quantity": 0.5, "unit": "bundle" },
+        { "ingredient_id": "ING_029", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 396,
+        "protein_g": 16,
+        "carbs_g": 71.3,
+        "fat_g": 6.5,
+        "sodium_mg": 800,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 48.63,
+      "tags": ["local_greens", "common_household"]
+    },
+    {
+      "meal_id": "MEAL_016",
+      "name_en": "Milk with Roti (2 pcs)",
+      "name_bn": "দুধ ও রুটি (২টি)",
+      "meal_type": ["Breakfast", "Dinner"],
+      "prep_time_min": 10,
+      "ingredients": [
+        { "ingredient_id": "ING_003", "quantity": 70, "unit": "g" },
+        { "ingredient_id": "ING_031", "quantity": 250, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 395,
+        "protein_g": 16,
+        "carbs_g": 62,
+        "fat_g": 9,
+        "sodium_mg": 150,
+        "sugar_g": 12
+      },
+      "total_cost_bdt": 29.20,
+      "tags": ["vegetarian", "quick_meal", "calcium_rich"]
+    },
+    {
+      "meal_id": "MEAL_017",
+      "name_en": "Rice with Pangash Curry & Lal Shak Bhaji",
+      "name_bn": "পাঙ্গাস মাছের ঝোল ও লাল শাক ভাজি দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 35,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_028", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 40, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 15, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" },
+        { "ingredient_id": "ING_017", "quantity": 0.5, "unit": "bundle" }
+      ],
+      "total_nutrition": {
+        "calories": 647,
+        "protein_g": 24.8,
+        "carbs_g": 74,
+        "fat_g": 28,
+        "sodium_mg": 1300,
+        "sugar_g": 6
+      },
+      "total_cost_bdt": 44.46,
+      "tags": ["low_cost", "local_fish", "high_fat", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_018",
+      "name_en": "Dimer Dalna (Egg Curry) with Rice",
+      "name_bn": "ডিমের ডালনা ও ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 30,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_030", "quantity": 2, "unit": "pcs" },
+        { "ingredient_id": "ING_006", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 576,
+        "protein_g": 19.8,
+        "carbs_g": 79,
+        "fat_g": 21,
+        "sodium_mg": 1200,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 38.96,
+      "tags": ["common_household", "budget_friendly", "vegetarian_option"]
+    },
+    {
+      "meal_id": "MEAL_019",
+      "name_en": "Muri (Puffed Rice) with Chanachur",
+      "name_bn": "চানাচুর দিয়ে মুড়ি",
+      "meal_type": ["Snack"],
+      "prep_time_min": 2,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_007", "quantity": 10, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 284,
+        "protein_g": 4.6,
+        "carbs_g": 51,
+        "fat_g": 6.5,
+        "sodium_mg": 400,
+        "sugar_g": 1
+      },
+      "total_cost_bdt": 6.55,
+      "tags": ["low_cost", "quick_meal", "snack", "traditional_snack"]
+    },
+    {
+      "meal_id": "MEAL_020",
+      "name_en": "Lentil Soup (Masoor Dal) - 1 Bowl",
+      "name_bn": "মসুর ডাল (১ বাটি)",
+      "meal_type": ["Lunch", "Dinner", "Side"],
+      "prep_time_min": 20,
+      "ingredients": [
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 15, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 2, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 272,
+        "protein_g": 15.5,
+        "carbs_g": 38,
+        "fat_g": 6.2,
+        "sodium_mg": 800,
+        "sugar_g": 3
+      },
+      "total_cost_bdt": 12.13,
+      "tags": ["low_cost", "vegetarian", "high_protein", "diabetic_friendly", "hypertension_friendly"]
+    },
+    {
+      "meal_id": "MEAL_021",
+      "name_en": "Rice with Begun Bhorta & Masoor Dal",
+      "name_bn": "বেগুন ভর্তা ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 30,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_013", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 35, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 674,
+        "protein_g": 23,
+        "carbs_g": 112,
+        "fat_g": 14.7,
+        "sodium_mg": 1600,
+        "sugar_g": 9
+      },
+      "total_cost_bdt": 31.93,
+      "tags": ["vegetarian", "low_cost", "traditional", "bhorta", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_022",
+      "name_en": "Rice with Palong Shak & Masoor Dal",
+      "name_bn": "পালং শাক ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_016", "quantity": 0.5, "unit": "bundle" },
+        { "ingredient_id": "ING_008", "quantity": 10, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 25, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 677,
+        "protein_g": 24.5,
+        "carbs_g": 114,
+        "fat_g": 13.7,
+        "sodium_mg": 1600,
+        "sugar_g": 6
+      },
+      "total_cost_bdt": 41.32,
+      "tags": ["vegetarian", "local_greens", "diabetic_friendly", "hypertension_friendly", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_023",
+      "name_en": "Ilish Bhaja with Rice & Begun Bhaja",
+      "name_bn": "ইলিশ ভাজা, ভাত ও বেগুন ভাজা",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 20,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_027", "quantity": 75, "unit": "g" },
+        { "ingredient_id": "ING_033", "quantity": 2, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 15, "unit": "ml" },
+        { "ingredient_id": "ING_013", "quantity": 50, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 626,
+        "protein_g": 21.5,
+        "carbs_g": 72,
+        "fat_g": 29.5,
+        "sodium_mg": 400,
+        "sugar_g": 3
+      },
+      "total_cost_bdt": 104.93,
+      "tags": ["premium_meal", "local_fish", "traditional_rich", "high_fat", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_024",
+      "name_en": "Chicken & Vegetable Clear Soup",
+      "name_bn": "চিকেন ও সবজির স্যুপ",
+      "meal_type": ["Snack", "Dinner"],
+      "prep_time_min": 30,
+      "ingredients": [
+        { "ingredient_id": "ING_023", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_041", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 10, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 182,
+        "protein_g": 18,
+        "carbs_g": 12.5,
+        "fat_g": 6,
+        "sodium_mg": 300,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 21.45,
+      "tags": ["light_meal", "low_calorie", "low_fat", "hypertension_friendly", "sick_day_meal", "high_protein"]
+    },
+    {
+      "meal_id": "MEAL_025",
+      "name_en": "Sujir Halwa (Semolina Halwa)",
+      "name_bn": "সুজির হালুয়া",
+      "meal_type": ["Breakfast", "Snack"],
+      "prep_time_min": 15,
+      "ingredients": [
+        { "ingredient_id": "ING_003", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_031", "quantity": 100, "unit": "ml" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 285,
+        "protein_g": 8,
+        "carbs_g": 48,
+        "fat_g": 6.5,
+        "sodium_mg": 60,
+        "sugar_g": 18
+      },
+      "total_cost_bdt": 13.95,
+      "tags": ["breakfast", "snack", "vegetarian", "high_sugar", "quick_meal"]
+    },
+    {
+      "meal_id": "MEAL_026",
+      "name_en": "Chola Bhuna (Spicy Chickpeas) - 1 Bowl",
+      "name_bn": "ছোলা ভুনা (১ বাটি)",
+      "meal_type": ["Snack"],
+      "prep_time_min": 30,
+      "ingredients": [
+        { "ingredient_id": "ING_005", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_034", "quantity": 3, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 405,
+        "protein_g": 19.5,
+        "carbs_g": 60,
+        "fat_g": 10.5,
+        "sodium_mg": 600,
+        "sugar_g": 7
+      },
+      "total_cost_bdt": 18.89,
+      "tags": ["snack", "high_protein", "vegetarian", "traditional_snack", "ramadan_special"]
+    },
+    {
+      "meal_id": "MEAL_027",
+      "name_en": "Misti Doi (Sweet Yogurt) - 1 Cup",
+      "name_bn": "মিষ্টি দই (১ কাপ)",
+      "meal_type": ["Snack", "Dessert"],
+      "prep_time_min": 2,
+      "ingredients": [
+        { "ingredient_id": "ING_032", "quantity": 150, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 220,
+        "protein_g": 5,
+        "carbs_g": 38,
+        "fat_g": 5.1,
+        "sodium_mg": 70,
+        "sugar_g": 35
+      },
+      "total_cost_bdt": 19.50,
+      "tags": ["snack", "dessert", "probiotic", "high_sugar", "no_cook"]
+    },
+    {
+      "meal_id": "MEAL_028",
+      "name_en": "Rice with Papaya Bhorta & Masoor Dal",
+      "name_bn": "পেঁপে ভর্তা ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_041", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 25, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 652,
+        "protein_g": 22.6,
+        "carbs_g": 116,
+        "fat_g": 11.7,
+        "sodium_mg": 1600,
+        "sugar_g": 10
+      },
+      "total_cost_bdt": 29.13,
+      "tags": ["vegetarian", "low_cost", "traditional", "bhorta", "diabetic_friendly", "light_meal", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_029",
+      "name_en": "Chicken Sandwich (Simple)",
+      "name_bn": "চিকেন স্যান্ডউইচ",
+      "meal_type": ["Breakfast", "Snack"],
+      "prep_time_min": 10,
+      "ingredients": [
+        { "ingredient_id": "ING_023", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_010", "quantity": 20, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 260,
+        "protein_g": 19,
+        "carbs_g": 30,
+        "fat_g": 7,
+        "sodium_mg": 500,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 17.90,
+      "tags": ["snack", "light_meal", "western_style", "high_protein", "quick_meal"]
+    },
+    {
+      "meal_id": "MEAL_030",
+      "name_en": "Rice with Tomato Bhorta & Masoor Dal",
+      "name_bn": "টমেটো ভর্তা ও মসুর ডাল দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 25,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_010", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 35, "unit": "g" },
+        { "ingredient_id": "ING_011", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_004", "quantity": 60, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" },
+        { "ingredient_id": "ING_037", "quantity": 4, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 666,
+        "protein_g": 23.5,
+        "carbs_g": 115,
+        "fat_g": 12.7,
+        "sodium_mg": 1600,
+        "sugar_g": 10
+      },
+      "total_cost_bdt": 34.93,
+      "tags": ["vegetarian", "low_cost", "traditional", "bhorta", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_031",
+      "name_en": "Lau Shak Bhaji (Bottle Gourd Leaves)",
+      "name_bn": "লাউ শাক ভাজি",
+      "meal_type": ["Lunch", "Dinner", "Side"],
+      "prep_time_min": 15,
+      "ingredients": [
+        { "ingredient_id": "ING_018", "quantity": 0.5, "unit": "bundle" },
+        { "ingredient_id": "ING_007", "quantity": 10, "unit": "g" },
+        { "ingredient_id": "ING_008", "quantity": 5, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 5, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 95,
+        "protein_g": 2,
+        "carbs_g": 5,
+        "fat_g": 7,
+        "sodium_mg": 150,
+        "sugar_g": 2
+      },
+      "total_cost_bdt": 14.89,
+      "tags": ["vegetarian", "low_cost", "local_greens", "diabetic_friendly", "hypertension_friendly", "side_dish"]
+    },
+    {
+      "meal_id": "MEAL_032",
+      "name_en": "Simple Salad Bowl (Side)",
+      "name_bn": "সাধারণ সালাদ (সাইড)",
+      "meal_type": ["Snack", "Side"],
+      "prep_time_min": 5,
+      "ingredients": [
+        { "ingredient_id": "ING_010", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" },
+        { "ingredient_id": "ING_012", "quantity": 10, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 35,
+        "protein_g": 1.2,
+        "carbs_g": 7,
+        "fat_g": 0.3,
+        "sodium_mg": 20,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 10.60,
+      "tags": ["vegetarian", "low_cost", "low_calorie", "diabetic_friendly", "hypertension_friendly", "side_dish", "no_cook"]
+    },
+    {
+      "meal_id": "MEAL_033",
+      "name_en": "Rice with Beef Bhuna & Lal Shak Bhaji",
+      "name_bn": "বিফ ভুনা ও লাল শাক ভাজি দিয়ে ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 50,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_024", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_017", "quantity": 0.5, "unit": "bundle" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 710,
+        "protein_g": 35,
+        "carbs_g": 74,
+        "fat_g": 31,
+        "sodium_mg": 900,
+        "sugar_g": 6
+      },
+      "total_cost_bdt": 98.48,
+      "tags": ["high_protein", "traditional_rich", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_034",
+      "name_en": "Rice with Beef & Potato Curry (Aloo Goru)",
+      "name_bn": "গরুর মাংসের ঝোল (আলু দিয়ে) ও ভাত",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 55,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_024", "quantity": 100, "unit": "g" },
+        { "ingredient_id": "ING_006", "quantity": 50, "unit": "g" },
+        { "ingredient_id": "ING_007", "quantity": 30, "unit": "g" },
+        { "ingredient_id": "ING_038", "quantity": 10, "unit": "ml" }
+      ],
+      "total_nutrition": {
+        "calories": 725,
+        "protein_g": 34.5,
+        "carbs_g": 78,
+        "fat_g": 31,
+        "sodium_mg": 900,
+        "sugar_g": 5
+      },
+      "total_cost_bdt": 87.81,
+      "tags": ["high_protein", "common_household", "high_calorie", "complete_meal"]
+    },
+    {
+      "meal_id": "MEAL_035",
+      "name_en": "Beef Tehari (One-Pot Pilaf)",
+      "name_bn": "বিফ তেহারি",
+      "meal_type": ["Lunch", "Dinner"],
+      "prep_time_min": 60,
+      "ingredients": [
+        { "ingredient_id": "ING_001", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_024", "quantity": 80, "unit": "g" },
+        { "ingredient_id": "ING_039", "quantity": 10, "unit": "ml" },
+        { "ingredient_id": "ING_031", "quantity": 50, "unit": "ml" },
+        { "ingredient_id": "ING_007", "quantity": 20, "unit": "g" }
+      ],
+      "total_nutrition": {
+        "calories": 670,
+        "protein_g": 29.5,
+        "carbs_g": 70,
+        "fat_g": 30,
+        "sodium_mg": 800,
+        "sugar_g": 4
+      },
+      "total_cost_bdt": 76.20,
+      "tags": ["high_protein", "one_pot_meal", "traditional_rich", "high_calorie"]
+    }
+  ]
+}

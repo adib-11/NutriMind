@@ -1,0 +1,5 @@
+<svg width="1200" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="400" fill="#22c55e"/>
+  <text x="600" y="180" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="white" text-anchor="middle">NutriMind</text>
+  <text x="600" y="240" font-family="Arial, sans-serif" font-size="28" fill="white" text-anchor="middle">Smart Meal Planning for Bangladesh</text>
+</svg>

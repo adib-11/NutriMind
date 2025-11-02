@@ -1,0 +1,289 @@
+[
+  {
+    "id": "ING_001",
+    "name": "Rice (Miniket)",
+    "name_bn": "চাল (মিনিকেট)",
+    "unit": "kg",
+    "price_bdt": 85
+  },
+  {
+    "id": "ING_002",
+    "name": "Rice (Nazirshail)",
+    "name_bn": "চাল (নাজিরশাইল)",
+    "unit": "kg",
+    "price_bdt": 95
+  },
+  {
+    "id": "ING_003",
+    "name": "Atta (Whole Wheat Flour)",
+    "name_bn": "আটা",
+    "unit": "kg",
+    "price_bdt": 60
+  },
+  {
+    "id": "ING_004",
+    "name": "Red Lentil (Masoor Dal)",
+    "name_bn": "মসুর ডাল",
+    "unit": "kg",
+    "price_bdt": 155
+  },
+  {
+    "id": "ING_005",
+    "name": "Mung Dal (Moong Dal)",
+    "name_bn": "মুগ ডাল",
+    "unit": "kg",
+    "price_bdt": 160
+  },
+  {
+    "id": "ING_006",
+    "name": "Potato",
+    "name_bn": "আলু",
+    "unit": "kg",
+    "price_bdt": 35
+  },
+  {
+    "id": "ING_007",
+    "name": "Onion",
+    "name_bn": "পেঁয়াজ",
+    "unit": "kg",
+    "price_bdt": 80
+  },
+  {
+    "id": "ING_008",
+    "name": "Garlic (Local)",
+    "name_bn": "রসুন (দেশি)",
+    "unit": "kg",
+    "price_bdt": 120
+  },
+  {
+    "id": "ING_009",
+    "name": "Ginger",
+    "name_bn": "আদা",
+    "unit": "kg",
+    "price_bdt": 200
+  },
+  {
+    "id": "ING_010",
+    "name": "Tomato",
+    "name_bn": "টমেটো",
+    "unit": "kg",
+    "price_bdt": 120
+  },
+  {
+    "id": "ING_011",
+    "name": "Green Chili",
+    "name_bn": "কাঁচা মরিচ",
+    "unit": "kg",
+    "price_bdt": 180
+  },
+  {
+    "id": "ING_012",
+    "name": "Coriander Leaves",
+    "name_bn": "ধনিয়া পাতা",
+    "unit": "100g",
+    "price_bdt": 30
+  },
+  {
+    "id": "ING_013",
+    "name": "Eggplant (Brinjal)",
+    "name_bn": "বেগুন",
+    "unit": "kg",
+    "price_bdt": 90
+  },
+  {
+    "id": "ING_014",
+    "name": "Okra (Lady's Finger)",
+    "name_bn": "ঢেঁড়স",
+    "unit": "kg",
+    "price_bdt": 70
+  },
+  {
+    "id": "ING_015",
+    "name": "Pointed Gourd (Potol)",
+    "name_bn": "পটল",
+    "unit": "kg",
+    "price_bdt": 60
+  },
+  {
+    "id": "ING_016",
+    "name": "Spinach (Palong Shak)",
+    "name_bn": "পালং শাক",
+    "unit": "bundle",
+    "price_bdt": 40
+  },
+  {
+    "id": "ING_017",
+    "name": "Red Amaranth (Lal Shak)",
+    "name_bn": "লাল শাক",
+    "unit": "bundle",
+    "price_bdt": 25
+  },
+  {
+    "id": "ING_018",
+    "name": "Malabar Spinach (Pui Shak)",
+    "name_bn": " পুঁই শাক",
+    "unit": "bundle",
+    "price_bdt": 25
+  },
+  {
+    "id": "ING_019",
+    "name": "Bottle Gourd (Lau)",
+    "name_bn": "লাউ",
+    "unit": "piece",
+    "price_bdt": 65
+  },
+  {
+    "id": "ING_020",
+    "name": "Sweet Pumpkin (Mishti Kumra)",
+    "name_bn": "মিষ্টি কুমড়া",
+    "unit": "kg",
+    "price_bdt": 40
+  },
+  {
+    "id": "ING_021",
+    "name": "Cauliflower",
+    "name_bn": "ফুলকপি",
+    "unit": "piece",
+    "price_bdt": 50
+  },
+  {
+    "id": "ING_022",
+    "name": "Cabbage",
+    "name_bn": "বাঁধাকপি",
+    "unit": "piece",
+    "price_bdt": 45
+  },
+  {
+    "id": "ING_023",
+    "name": "Chicken (Broiler)",
+    "name_bn": "মুরগি (ব্রয়লার)",
+    "unit": "kg",
+    "price_bdt": 310
+  },
+  {
+    "id": "ING_024",
+    "name": "Beef",
+    "name_bn": "গরুর মাংস",
+    "unit": "kg",
+    "price_bdt": 750
+  },
+  {
+    "id": "ING_025",
+    "name": "Mutton (Khashi)",
+    "name_bn": "খাসির মাংস",
+    "unit": "kg",
+    "price_bdt": 1200
+  },
+  {
+    "id": "ING_026",
+    "name": "Rui Fish",
+    "name_bn": "রুই মাছ",
+    "unit": "kg",
+    "price_bdt": 399
+  },
+  {
+    "id": "ING_027",
+    "name": "Ilish Fish (Hilsha)",
+    "name_bn": "ইলিশ মাছ",
+    "unit": "kg",
+    "price_bdt": 1200
+  },
+  {
+    "id": "ING_028",
+    "name": "Pangash Fish",
+    "name_bn": "পাঙ্গাস মাছ",
+    "unit": "kg",
+    "price_bdt": 190
+  },
+  {
+    "id": "ING_029",
+    "name": "Shrimp (Medium)",
+    "name_bn": "চিংড়ি (মাঝারি)",
+    "unit": "kg",
+    "price_bdt": 890
+  },
+  {
+    "id": "ING_030",
+    "name": "Egg",
+    "name_bn": "ডিম",
+    "unit": "piece",
+    "price_bdt": 13
+  },
+  {
+    "id": "ING_031",
+    "name": "Milk (Liquid)",
+    "name_bn": "তরল দুধ",
+    "unit": "litre",
+    "price_bdt": 100
+  },
+  {
+    "id": "ING_032",
+    "name": "Yogurt (Tok Doi)",
+    "name_bn": "টক দই",
+    "unit": "kg",
+    "price_bdt": 130
+  },
+  {
+    "id": "ING_033",
+    "name": "Turmeric Powder",
+    "name_bn": "হলুদ গুঁড়া",
+    "unit": "kg",
+    "price_bdt": 400
+  },
+  {
+    "id": "ING_034",
+    "name": "Cumin Powder",
+    "name_bn": "জিরা গুঁড়া",
+    "unit": "kg",
+    "price_bdt": 600
+  },
+  {
+    "id": "ING_035",
+    "name": "Coriander Powder",
+    "name_bn": "ধনিয়া গুঁড়া",
+    "unit": "kg",
+    "price_bdt": 350
+  },
+  {
+    "id": "ING_036",
+    "name": "Red Chili Powder",
+    "name_bn": "মরিচ গুঁড়া",
+    "unit": "kg",
+    "price_bdt": 450
+  },
+  {
+    "id": "ING_037",
+    "name": "Salt",
+    "name_bn": "লবণ",
+    "unit": "kg",
+    "price_bdt": 40
+  },
+  {
+    "id": "ING_038",
+    "name": "Soybean Oil",
+    "name_bn": "সয়াবিন তেল",
+    "unit": "litre",
+    "price_bdt": 189
+  },
+  {
+    "id": "ING_039",
+    "name": "Mustard Oil",
+    "name_bn": "সরিষার তেল",
+    "unit": "litre",
+    "price_bdt": 300
+  },
+  {
+    "id": "ING_040",
+    "name": "Banana (Sagor)",
+    "name_bn": "সাগর কলা",
+    "unit": "piece",
+    "price_bdt": 14
+  },
+  {
+    "id": "ING_041",
+    "name": "Papaya (Ripe)",
+    "name_bn": "পাকা পেঁপে",
+    "unit": "kg",
+    "price_bdt": 70
+  }
+]
