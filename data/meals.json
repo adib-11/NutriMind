@@ -149,7 +149,7 @@
         "sugar_g": 18
       },
       "total_cost_bdt": 33.50,
-      "tags": ["quick_meal", "probiotic", "snack", "no_cook"]
+      "tags": ["quick_meal", "probiotic", "snack", "no_cook", "low_sodium"]
     },
     {
       "meal_id": "MEAL_007",
@@ -169,7 +169,7 @@
         "sugar_g": 0.5
       },
       "total_cost_bdt": 13.00,
-      "tags": ["snack", "high_protein", "low_carb", "low_cost"]
+      "tags": ["snack", "high_protein", "low_carb", "low_cost", "low_sodium"]
     },
     {
       "meal_id": "MEAL_008",
@@ -397,7 +397,7 @@
         "sugar_g": 12
       },
       "total_cost_bdt": 29.20,
-      "tags": ["vegetarian", "quick_meal", "calcium_rich"]
+      "tags": ["vegetarian", "quick_meal", "calcium_rich", "low_sodium"]
     },
     {
       "meal_id": "MEAL_017",
@@ -469,7 +469,7 @@
         "sugar_g": 1
       },
       "total_cost_bdt": 6.55,
-      "tags": ["low_cost", "quick_meal", "snack", "traditional_snack"]
+      "tags": ["low_cost", "quick_meal", "snack", "traditional_snack", "low_sodium"]
     },
     {
       "meal_id": "MEAL_020",
@@ -571,7 +571,7 @@
         "sugar_g": 3
       },
       "total_cost_bdt": 104.93,
-      "tags": ["premium_meal", "local_fish", "traditional_rich", "high_fat", "complete_meal"]
+      "tags": ["premium_meal", "local_fish", "traditional_rich", "high_fat", "complete_meal", "low_sodium"]
     },
     {
       "meal_id": "MEAL_024",
@@ -595,7 +595,7 @@
         "sugar_g": 5
       },
       "total_cost_bdt": 21.45,
-      "tags": ["light_meal", "low_calorie", "low_fat", "hypertension_friendly", "sick_day_meal", "high_protein"]
+      "tags": ["light_meal", "low_calorie", "low_fat", "hypertension_friendly", "sick_day_meal", "high_protein", "low_sodium"]
     },
     {
       "meal_id": "MEAL_025",
@@ -617,7 +617,7 @@
         "sugar_g": 18
       },
       "total_cost_bdt": 13.95,
-      "tags": ["breakfast", "snack", "vegetarian", "high_sugar", "quick_meal"]
+      "tags": ["breakfast", "snack", "vegetarian", "high_sugar", "quick_meal", "low_sodium"]
     },
     {
       "meal_id": "MEAL_026",
@@ -640,7 +640,7 @@
         "sugar_g": 7
       },
       "total_cost_bdt": 18.89,
-      "tags": ["snack", "high_protein", "vegetarian", "traditional_snack", "ramadan_special"]
+      "tags": ["snack", "high_protein", "vegetarian", "traditional_snack", "ramadan_special", "low_sodium"]
     },
     {
       "meal_id": "MEAL_027",
@@ -660,7 +660,7 @@
         "sugar_g": 35
       },
       "total_cost_bdt": 19.50,
-      "tags": ["snack", "dessert", "probiotic", "high_sugar", "no_cook"]
+      "tags": ["snack", "dessert", "probiotic", "high_sugar", "no_cook", "low_sodium"]
     },
     {
       "meal_id": "MEAL_028",
@@ -760,7 +760,7 @@
         "sugar_g": 2
       },
       "total_cost_bdt": 14.89,
-      "tags": ["vegetarian", "low_cost", "local_greens", "diabetic_friendly", "hypertension_friendly", "side_dish"]
+      "tags": ["vegetarian", "low_cost", "local_greens", "diabetic_friendly", "hypertension_friendly", "side_dish", "low_sodium"]
     },
     {
       "meal_id": "MEAL_032",
@@ -782,7 +782,7 @@
         "sugar_g": 5
       },
       "total_cost_bdt": 10.60,
-      "tags": ["vegetarian", "low_cost", "low_calorie", "diabetic_friendly", "hypertension_friendly", "side_dish", "no_cook"]
+      "tags": ["vegetarian", "low_cost", "low_calorie", "diabetic_friendly", "hypertension_friendly", "side_dish", "no_cook", "low_sodium"]
     },
     {
       "meal_id": "MEAL_033",

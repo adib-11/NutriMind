@@ -46,10 +46,11 @@ export async function POST(request: NextRequest) {
 
     // Task 6: Calculate User's Calorie Goal
     let calorieGoal = 2500; // Default
+    let bmr = 0;
+    let tdee = 0;
     
     if (userData.age && userData.gender && userData.weight && userData.height && userData.activityLevel) {
       // Simple BMR calculation (Mifflin-St Jeor)
-      let bmr: number;
       if (userData.gender.toLowerCase() === 'male') {
         bmr = 10 * userData.weight + 6.25 * userData.height - 5 * userData.age + 5;
       } else {
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
         'Active': 1.725
       };
       const multiplier = activityMultipliers[userData.activityLevel] || 1.55;
-      let tdee = bmr * multiplier;
+      tdee = bmr * multiplier;
       
       // Adjust for health goal
       if (userData.healthGoal === 'Weight Loss') {
@@ -76,22 +77,91 @@ export async function POST(request: NextRequest) {
       calorieGoal = Math.round(tdee);
     }
 
-    // Task 7: Construct Gemini AI Prompt
-    const prompt = `You are a meal planning assistant. Based on the user's requirements and the available meals, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
+    // Task 3: Calculate macro targets based on health goal
+    let proteinPercent, carbsPercent, fatPercent;
+    if (userData.healthGoal === 'Weight Loss') {
+      proteinPercent = 0.30; carbsPercent = 0.40; fatPercent = 0.30;
+    } else if (userData.healthGoal === 'Weight Gain') {
+      proteinPercent = 0.25; carbsPercent = 0.50; fatPercent = 0.25;
+    } else { // Weight Maintenance
+      proteinPercent = 0.25; carbsPercent = 0.45; fatPercent = 0.30;
+    }
+    
+    const proteinTarget = Math.round((calorieGoal * proteinPercent) / 4); // 4 cal/g
+    const carbsTarget = Math.round((calorieGoal * carbsPercent) / 4);
+    const fatTarget = Math.round((calorieGoal * fatPercent) / 9); // 9 cal/g
 
-REQUIREMENTS:
-- Total calories should be close to ${calorieGoal} kcal
-- Total cost must be under ${userData.budget} BDT
-${userData.isVegetarian ? '- ALL meals must have the "vegetarian" tag' : ''}
-${userData.healthConditions.includes('Type 2 Diabetes') ? '- ALL meals must have the "diabetic_friendly" tag' : ''}
-${userData.healthConditions.includes('Hypertension') ? '- ALL meals must have the "low_sodium" tag' : ''}
-${userData.allergies ? `- NO meals should contain these allergens in their ingredients: ${userData.allergies}` : ''}
+    // Task 9: Add console logging for debugging
+    console.log('🔵 Calorie Calculations:', {
+      bmr,
+      tdee,
+      calorieGoal,
+      healthGoal: userData.healthGoal
+    });
+    console.log('🔵 Macro Targets:', {
+      protein: `${proteinTarget}g (${proteinPercent * 100}%)`,
+      carbs: `${carbsTarget}g (${carbsPercent * 100}%)`,
+      fat: `${fatTarget}g (${fatPercent * 100}%)`
+    });
+
+    // Task 7: Construct Gemini AI Prompt (Enhanced with comprehensive user profile)
+    const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
+
+USER PROFILE ANALYSIS:
+- Age: ${userData.age || 'Not provided'} years
+- Gender: ${userData.gender || 'Not provided'}
+- Weight: ${userData.weight || 'Not provided'} kg
+- Height: ${userData.height || 'Not provided'} cm
+- Activity Level: ${userData.activityLevel || 'Not provided'}
+- Health Goal: ${userData.healthGoal || 'Not provided'}
+- BMR (Basal Metabolic Rate): ${bmr} kcal/day
+- TDEE (Total Daily Energy Expenditure): ${tdee} kcal/day
+- Target Daily Calories: ${calorieGoal} kcal (adjusted for ${userData.healthGoal})
+
+NUTRITIONAL REQUIREMENTS:
+Target Daily Calories: ${calorieGoal} kcal
+
+CALORIE DISTRIBUTION BY MEAL TYPE:
+- Breakfast: ~${Math.round(calorieGoal * 0.25)} kcal (25%)
+- Lunch: ~${Math.round(calorieGoal * 0.35)} kcal (35%)
+- Dinner: ~${Math.round(calorieGoal * 0.30)} kcal (30%)
+- Snack: ~${Math.round(calorieGoal * 0.10)} kcal (10%)
+
+MACRONUTRIENT TARGETS (Total for all 4 meals):
+- Protein: ~${proteinTarget}g (${proteinPercent * 100}% of calories)
+- Carbohydrates: ~${carbsTarget}g (${carbsPercent * 100}% of calories)
+- Fat: ~${fatTarget}g (${fatPercent * 100}% of calories)
+
+IMPORTANT: Select meals that collectively meet these calorie and macro targets.
+
+HEALTH CONDITIONS & CONSTRAINTS:
+${userData.healthConditions.includes('Type 2 Diabetes') ? `- Type 2 Diabetes:
+  * MANDATORY: All meals MUST have "diabetic_friendly" tag
+  * VALIDATION: Each meal sugar content SHOULD be < 10g (double-check nutrition data)
+  * Prefer low glycemic index foods
+` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension:
+  * MANDATORY: All meals MUST have "low_sodium" tag
+  * VALIDATION: Each meal sodium content SHOULD be < 800mg (double-check nutrition data)
+  * Avoid processed foods with hidden sodium
+` : ''}${userData.isVegetarian ? `- Vegetarian Diet:
+  * MANDATORY: All meals MUST have "vegetarian" tag
+  * Exclude all meat, poultry, fish, and seafood
+` : ''}
+Budget Constraint: Total cost must be under ${userData.budget} BDT
+${userData.allergies ? `Allergies: NO meals should contain these allergens in their ingredients: ${userData.allergies}` : ''}
 
 AVAILABLE MEALS:
 ${JSON.stringify(allMeals, null, 2)}
 
 OUTPUT FORMAT:
-Return ONLY a JSON array of meal_id strings. Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
+Return ONLY a JSON array of meal_id strings. 
+Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
+
+Select exactly 4 meals:
+- 1 meal tagged with "Breakfast" 
+- 1 meal tagged with "Lunch"
+- 1 meal tagged with "Dinner"
+- 1 meal tagged with "Snack"
 
 Do not include any explanation or additional text. Just the JSON array.`;
 
