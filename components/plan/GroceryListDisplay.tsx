@@ -19,7 +19,7 @@ interface AggregatedIngredient {
 
 export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
   const router = useRouter();
-  const allIngredients: Ingredient[] = ingredientsData;
+  const allIngredients = ingredientsData as Ingredient[];
 
   // Aggregate ingredients from all meals
   const aggregatedIngredients = useMemo(() => {
