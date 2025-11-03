@@ -214,17 +214,23 @@ ${JSON.stringify(simplifiedMeals)}
 OUTPUT FORMAT:
 Return ONLY a JSON array of exactly 4 meal_id strings.
 
-CRITICAL SELECTION RULES:
-1. Select exactly ONE meal where "Breakfast" appears in the meal_type array
-2. Select exactly ONE meal where "Lunch" appears in the meal_type array  
-3. Select exactly ONE meal where "Dinner" appears in the meal_type array
-4. Select exactly ONE meal where "Snack" appears in the meal_type array
-5. Ensure these are 4 DIFFERENT meals (no duplicates)
-6. Ensure total cost < ${userData.budget} BDT
+CRITICAL SELECTION RULES - MUST FOLLOW EXACTLY:
+1. Select exactly ONE meal for Breakfast (meal_type contains "Breakfast")
+2. Select exactly ONE DIFFERENT meal for Lunch (meal_type contains "Lunch")  
+3. Select exactly ONE DIFFERENT meal for Dinner (meal_type contains "Dinner")
+4. Select exactly ONE DIFFERENT meal for Snack (meal_type contains "Snack")
 
-Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
+IMPORTANT CONSTRAINTS:
+- All 4 meals MUST be different meal_ids
+- Each meal can only be used ONCE
+- Do NOT select the same meal multiple times even if it has multiple meal_type tags
+- Total cost must be < ${userData.budget} BDT
 
-Do not include any explanation or additional text. Just the JSON array.`;
+VALIDATION: The final 4 meals should give you exactly one of each meal type when displayed to the user.
+
+Example output: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
+
+Return ONLY the JSON array with no explanation or additional text.`;
 
     console.log(`🔵 Prompt character count: ${prompt.length}, Meals in prompt: ${simplifiedMeals.length}`);
 
