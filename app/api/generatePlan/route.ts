@@ -158,6 +158,19 @@ export async function POST(request: NextRequest) {
     
     console.log('🔵 Final eligible meals count:', eligibleMeals.length);
 
+    // Create a simplified meal list for AI (reduce prompt size for faster processing)
+    const simplifiedMeals = eligibleMeals.map(meal => ({
+      meal_id: meal.meal_id,
+      name_en: meal.name_en,
+      meal_type: meal.meal_type,
+      calories: meal.total_nutrition.calories,
+      protein_g: meal.total_nutrition.protein_g,
+      carbs_g: meal.total_nutrition.carbs_g,
+      fat_g: meal.total_nutrition.fat_g,
+      cost_bdt: meal.total_cost_bdt,
+      tags: meal.tags
+    }));
+
     // Task 7: Construct Gemini AI Prompt (Enhanced with comprehensive user profile)
     const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
 
@@ -207,7 +220,7 @@ ${userData.allergies ? `Allergies: NO meals should contain these allergens in th
 NOTE: The meals provided below have already been pre-filtered based on health constraints (vegetarian, diabetic_friendly, low_sodium tags as applicable).
 
 AVAILABLE MEALS:
-${JSON.stringify(eligibleMeals, null, 2)}
+${JSON.stringify(simplifiedMeals, null, 2)}
 
 OUTPUT FORMAT:
 Return ONLY a JSON array of meal_id strings. 
