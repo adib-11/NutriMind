@@ -59,12 +59,14 @@ export async function POST(request: NextRequest) {
       
       // Activity multiplier
       const activityMultipliers: { [key: string]: number } = {
-        'Sedentary': 1.2,
-        'Light': 1.375,
-        'Moderate': 1.55,
-        'Active': 1.725
+        'sedentary': 1.2,
+        'light': 1.375,
+        'moderate': 1.55,
+        'active': 1.725
       };
-      const multiplier = activityMultipliers[userData.activityLevel] || 1.55;
+      // Normalize activity level to lowercase for case-insensitive matching
+      const normalizedActivity = userData.activityLevel?.toLowerCase();
+      const multiplier = activityMultipliers[normalizedActivity] || 1.55;
       tdee = bmr * multiplier;
       
       // Adjust for health goal
