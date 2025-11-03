@@ -202,37 +202,21 @@ MACRONUTRIENT TARGETS (Total for all 4 meals):
 IMPORTANT: Select meals that collectively meet these calorie and macro targets.
 
 HEALTH CONDITIONS & CONSTRAINTS:
-${userData.healthConditions.includes('Diabetes') ? `- Diabetes:
-  * All meals have been pre-filtered to include ONLY "diabetic_friendly" tagged meals
-  * Each meal sugar content SHOULD be < 10g (prefer lower sugar options)
-  * Prefer low glycemic index foods
-` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension:
-  * All meals have been pre-filtered to include ONLY "low_sodium" tagged meals
-  * Each meal sodium content SHOULD be < 800mg (prefer lower sodium options)
-  * Avoid processed foods with hidden sodium
-` : ''}${userData.isVegetarian ? `- Vegetarian Diet:
-  * All meals have been pre-filtered to include ONLY "vegetarian" tagged meals
-  * All available meals exclude meat, poultry, fish, and seafood
-` : ''}
-Budget Constraint: Total cost must be under ${userData.budget} BDT
-${userData.allergies ? `Allergies: NO meals should contain these allergens in their ingredients: ${userData.allergies}` : ''}
+${userData.healthConditions.includes('Diabetes') ? `- Diabetes: All meals pre-filtered for diabetic_friendly tag. Prefer lower sugar options.
+` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension: All meals pre-filtered for low_sodium tag. Prefer lower sodium options.
+` : ''}${userData.isVegetarian ? `- Vegetarian: All meals pre-filtered for vegetarian tag.
+` : ''}Budget: Under ${userData.budget} BDT total cost.
 
-NOTE: The meals provided below have already been pre-filtered based on health constraints (vegetarian, diabetic_friendly, low_sodium tags as applicable).
-
-AVAILABLE MEALS:
-${JSON.stringify(simplifiedMeals, null, 2)}
+AVAILABLE MEALS (pre-filtered):
+${JSON.stringify(simplifiedMeals)}
 
 OUTPUT FORMAT:
-Return ONLY a JSON array of meal_id strings. 
+Return ONLY a JSON array of exactly 4 meal_id strings (1 breakfast, 1 lunch, 1 dinner, 1 snack).
 Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
 
-Select exactly 4 meals:
-- 1 meal tagged with "Breakfast" 
-- 1 meal tagged with "Lunch"
-- 1 meal tagged with "Dinner"
-- 1 meal tagged with "Snack"
-
 Do not include any explanation or additional text. Just the JSON array.`;
+
+    console.log(`🔵 Prompt character count: ${prompt.length}, Meals in prompt: ${simplifiedMeals.length}`);
 
     // Task 8: Call Gemini API (with optional mock support for local testing)
     const mockResponse = process.env.GEMINI_MOCK_RESPONSE;
@@ -246,10 +230,22 @@ Do not include any explanation or additional text. Just the JSON array.`;
         throw new Error('Gemini API key is not configured');
       }
 
+      console.log('🔵 Calling Gemini API...');
+      const aiStartTime = Date.now();
+      
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+      const model = genAI.getGenerativeModel({ 
+        model: 'gemini-2.0-flash-exp',  // Use faster experimental model
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 100,  // We only need a small JSON array response
+        }
+      });
       const result = await model.generateContent(prompt);
       responseText = result.response.text();
+      
+      const aiTime = Date.now() - aiStartTime;
+      console.log(`🔵 Gemini API responded in: ${aiTime}ms (${(aiTime / 1000).toFixed(2)}s)`);
     }
 
     // Task 9: Parse Gemini Response
