@@ -68,9 +68,12 @@ export async function POST(request: NextRequest) {
       tdee = bmr * multiplier;
       
       // Adjust for health goal
-      if (userData.healthGoal === 'Weight Loss') {
+      // Normalize health goal string to handle both 'Weight Loss' and 'weight_loss' formats
+      const normalizedGoal = userData.healthGoal?.toLowerCase().replace(/[_\s]/g, '');
+      
+      if (normalizedGoal === 'weightloss') {
         tdee -= 500; // 500 calorie deficit
-      } else if (userData.healthGoal === 'Weight Gain') {
+      } else if (normalizedGoal === 'weightgain') {
         tdee += 500; // 500 calorie surplus
       }
       
@@ -78,10 +81,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Task 3: Calculate macro targets based on health goal
+    // Normalize health goal string to handle both 'Weight Loss' and 'weight_loss' formats
+    const normalizedGoal = userData.healthGoal?.toLowerCase().replace(/[_\s]/g, '');
     let proteinPercent, carbsPercent, fatPercent;
-    if (userData.healthGoal === 'Weight Loss') {
+    if (normalizedGoal === 'weightloss') {
       proteinPercent = 0.30; carbsPercent = 0.40; fatPercent = 0.30;
-    } else if (userData.healthGoal === 'Weight Gain') {
+    } else if (normalizedGoal === 'weightgain') {
       proteinPercent = 0.25; carbsPercent = 0.50; fatPercent = 0.25;
     } else { // Weight Maintenance
       proteinPercent = 0.25; carbsPercent = 0.45; fatPercent = 0.30;
