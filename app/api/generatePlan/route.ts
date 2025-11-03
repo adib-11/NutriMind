@@ -212,8 +212,16 @@ AVAILABLE MEALS (pre-filtered):
 ${JSON.stringify(simplifiedMeals)}
 
 OUTPUT FORMAT:
-Return ONLY a JSON array of exactly 4 meal_id strings (1 breakfast, 1 lunch, 1 dinner, 1 snack).
-Ensure total cost < ${userData.budget} BDT.
+Return ONLY a JSON array of exactly 4 meal_id strings.
+
+CRITICAL SELECTION RULES:
+1. Select exactly ONE meal where "Breakfast" appears in the meal_type array
+2. Select exactly ONE meal where "Lunch" appears in the meal_type array  
+3. Select exactly ONE meal where "Dinner" appears in the meal_type array
+4. Select exactly ONE meal where "Snack" appears in the meal_type array
+5. Ensure these are 4 DIFFERENT meals (no duplicates)
+6. Ensure total cost < ${userData.budget} BDT
+
 Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
 
 Do not include any explanation or additional text. Just the JSON array.`;
