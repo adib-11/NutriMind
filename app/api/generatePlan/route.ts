@@ -131,8 +131,8 @@ export async function POST(request: NextRequest) {
       console.log('🔵 Filtered for vegetarian:', eligibleMeals.length, 'meals remaining');
     }
     
-    // Filter for diabetes if required
-    if (userData.healthConditions.includes('Type 2 Diabetes')) {
+    // Filter for diabetes if required (frontend sends 'Diabetes')
+    if (userData.healthConditions.includes('Diabetes')) {
       eligibleMeals = eligibleMeals.filter(meal => 
         meal.tags.includes('diabetic_friendly')
       );
@@ -188,17 +188,17 @@ MACRONUTRIENT TARGETS (Total for all 4 meals):
 IMPORTANT: Select meals that collectively meet these calorie and macro targets.
 
 HEALTH CONDITIONS & CONSTRAINTS:
-${userData.healthConditions.includes('Type 2 Diabetes') ? `- Type 2 Diabetes:
-  * MANDATORY: All meals MUST have "diabetic_friendly" tag
-  * VALIDATION: Each meal sugar content SHOULD be < 10g (double-check nutrition data)
+${userData.healthConditions.includes('Diabetes') ? `- Diabetes:
+  * All meals have been pre-filtered to include ONLY "diabetic_friendly" tagged meals
+  * Each meal sugar content SHOULD be < 10g (prefer lower sugar options)
   * Prefer low glycemic index foods
 ` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension:
-  * MANDATORY: All meals MUST have "low_sodium" tag
-  * VALIDATION: Each meal sodium content SHOULD be < 800mg (double-check nutrition data)
+  * All meals have been pre-filtered to include ONLY "low_sodium" tagged meals
+  * Each meal sodium content SHOULD be < 800mg (prefer lower sodium options)
   * Avoid processed foods with hidden sodium
 ` : ''}${userData.isVegetarian ? `- Vegetarian Diet:
-  * MANDATORY: All meals MUST have "vegetarian" tag
-  * Exclude all meat, poultry, fish, and seafood
+  * All meals have been pre-filtered to include ONLY "vegetarian" tagged meals
+  * All available meals exclude meat, poultry, fish, and seafood
 ` : ''}
 Budget Constraint: Total cost must be under ${userData.budget} BDT
 ${userData.allergies ? `Allergies: NO meals should contain these allergens in their ingredients: ${userData.allergies}` : ''}
