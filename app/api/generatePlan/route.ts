@@ -120,6 +120,43 @@ export async function POST(request: NextRequest) {
       fat: `${fatTarget}g (${fatPercent * 100}%)`
     });
 
+    // Pre-filter meals based on health constraints BEFORE sending to AI
+    let eligibleMeals = [...allMeals];
+    
+    // Filter for vegetarian if required
+    if (userData.isVegetarian) {
+      eligibleMeals = eligibleMeals.filter(meal => 
+        meal.tags.includes('vegetarian')
+      );
+      console.log('🔵 Filtered for vegetarian:', eligibleMeals.length, 'meals remaining');
+    }
+    
+    // Filter for diabetes if required
+    if (userData.healthConditions.includes('Type 2 Diabetes')) {
+      eligibleMeals = eligibleMeals.filter(meal => 
+        meal.tags.includes('diabetic_friendly')
+      );
+      console.log('🔵 Filtered for diabetic_friendly:', eligibleMeals.length, 'meals remaining');
+    }
+    
+    // Filter for hypertension if required
+    if (userData.healthConditions.includes('Hypertension')) {
+      eligibleMeals = eligibleMeals.filter(meal => 
+        meal.tags.includes('low_sodium')
+      );
+      console.log('🔵 Filtered for low_sodium:', eligibleMeals.length, 'meals remaining');
+    }
+    
+    // Check if we have enough meals after filtering
+    if (eligibleMeals.length < 4) {
+      return NextResponse.json(
+        { error: `Insufficient meals available that match your health constraints. Only ${eligibleMeals.length} eligible meals found.` } as ApiError,
+        { status: 400 }
+      );
+    }
+    
+    console.log('🔵 Final eligible meals count:', eligibleMeals.length);
+
     // Task 7: Construct Gemini AI Prompt (Enhanced with comprehensive user profile)
     const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
 
@@ -166,8 +203,10 @@ ${userData.healthConditions.includes('Type 2 Diabetes') ? `- Type 2 Diabetes:
 Budget Constraint: Total cost must be under ${userData.budget} BDT
 ${userData.allergies ? `Allergies: NO meals should contain these allergens in their ingredients: ${userData.allergies}` : ''}
 
+NOTE: The meals provided below have already been pre-filtered based on health constraints (vegetarian, diabetic_friendly, low_sodium tags as applicable).
+
 AVAILABLE MEALS:
-${JSON.stringify(allMeals, null, 2)}
+${JSON.stringify(eligibleMeals, null, 2)}
 
 OUTPUT FORMAT:
 Return ONLY a JSON array of meal_id strings. 
