@@ -290,11 +290,58 @@ Return ONLY the JSON array with no explanation or additional text.`;
       throw new Error('No valid meal plan could be generated');
     }
 
+    // Ensure we have exactly one meal for each required meal type
+    const requiredMealTypes: Array<'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'> = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+    const usedMealIds = new Set<string>();
+    const mealTypeAssignments = new Map<string, Meal>();
+
+    // First, assign AI-selected meals to meal types when possible
+    for (const meal of selectedMeals) {
+      for (const mealType of meal.meal_type) {
+        if (requiredMealTypes.includes(mealType as typeof requiredMealTypes[number]) && !mealTypeAssignments.has(mealType)) {
+          mealTypeAssignments.set(mealType, meal);
+          usedMealIds.add(meal.meal_id);
+          break; // Assign each meal to at most one type
+        }
+      }
+    }
+
+    // Fallback: fill any missing meal types from eligible meals
+    for (const mealType of requiredMealTypes) {
+      if (!mealTypeAssignments.has(mealType)) {
+        const fallbackMeal = eligibleMeals
+          .filter(meal => meal.meal_type.includes(mealType) && !usedMealIds.has(meal.meal_id))
+          .sort((a, b) => a.total_cost_bdt - b.total_cost_bdt)[0];
+
+        if (!fallbackMeal) {
+          throw new Error(`Unable to find a meal for ${mealType}`);
+        }
+
+        mealTypeAssignments.set(mealType, fallbackMeal);
+        usedMealIds.add(fallbackMeal.meal_id);
+      }
+    }
+
+    const normalizedMeals = requiredMealTypes.map(type => mealTypeAssignments.get(type)!) as Meal[];
+
+    const totalSelectedCost = normalizedMeals.reduce((sum, meal) => sum + meal.total_cost_bdt, 0);
+    if (totalSelectedCost > userData.budget) {
+      console.warn('⚠️ Fallback selection exceeded budget.', { totalSelectedCost, budget: userData.budget });
+    }
+
+    console.log('🔵 Final meal assignments by type:', {
+      Breakfast: normalizedMeals[0]?.meal_id,
+      Lunch: normalizedMeals[1]?.meal_id,
+      Dinner: normalizedMeals[2]?.meal_id,
+      Snack: normalizedMeals[3]?.meal_id,
+      totalCost: totalSelectedCost
+    });
+
     // Task 11: Return Success Response
     const totalTime = Date.now() - startTime;
     console.log(`⏱️ Total API execution time: ${totalTime}ms (${(totalTime / 1000).toFixed(2)}s)`);
     
-    return NextResponse.json(selectedMeals as GeneratePlanResponse, { status: 200 });
+    return NextResponse.json(normalizedMeals as GeneratePlanResponse, { status: 200 });
 
   } catch (error) {
     // Task 12: Implement Error Handling
