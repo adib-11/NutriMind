@@ -205,13 +205,15 @@ HEALTH CONDITIONS & CONSTRAINTS:
 ${userData.healthConditions.includes('Diabetes') ? `- Diabetes: All meals pre-filtered for diabetic_friendly tag. Prefer lower sugar options.
 ` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension: All meals pre-filtered for low_sodium tag. Prefer lower sodium options.
 ` : ''}${userData.isVegetarian ? `- Vegetarian: All meals pre-filtered for vegetarian tag.
-` : ''}Budget: Under ${userData.budget} BDT total cost.
+` : ''}
+CRITICAL BUDGET CONSTRAINT: The total cost of all 4 selected meals MUST be under ${userData.budget} BDT. Check the cost_bdt field for each meal and ensure the sum is below ${userData.budget}.
 
 AVAILABLE MEALS (pre-filtered):
 ${JSON.stringify(simplifiedMeals)}
 
 OUTPUT FORMAT:
 Return ONLY a JSON array of exactly 4 meal_id strings (1 breakfast, 1 lunch, 1 dinner, 1 snack).
+Ensure total cost < ${userData.budget} BDT.
 Example: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
 
 Do not include any explanation or additional text. Just the JSON array.`;
@@ -237,8 +239,8 @@ Do not include any explanation or additional text. Just the JSON array.`;
       const model = genAI.getGenerativeModel({ 
         model: 'gemini-2.0-flash-exp',  // Use faster experimental model
         generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 100,  // We only need a small JSON array response
+          temperature: 0.5,  // Lower temperature for more focused, deterministic responses
+          maxOutputTokens: 200,  // Increased to allow AI to consider constraints better
         }
       });
       const result = await model.generateContent(prompt);
