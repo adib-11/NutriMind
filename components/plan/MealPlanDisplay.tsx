@@ -16,7 +16,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const userStore = useUserStore();
-  const { setMealPlan } = userStore;
+  const { setMealPlan, setDebugInfo } = userStore;
 
   // Calculate totals
   const totalCalories = meals.reduce((sum, meal) => sum + meal.total_nutrition.calories, 0);
@@ -72,10 +72,11 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
       };
 
       // Call API to generate new meal plan
-      const newMealPlan = await getMealPlan(userData);
+      const response = await getMealPlan(userData);
 
-      // Update meal plan in store
-      setMealPlan(newMealPlan);
+      // Update meal plan and debug info in store
+      setMealPlan(response.meals);
+      setDebugInfo(response.debugInfo);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate new meal plan';
       alert(`Error: ${errorMessage}`);
