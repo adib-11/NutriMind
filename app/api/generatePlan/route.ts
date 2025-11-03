@@ -70,11 +70,20 @@ export async function POST(request: NextRequest) {
       // Adjust for health goal
       // Normalize health goal string to handle both 'Weight Loss' and 'weight_loss' formats
       const normalizedGoal = userData.healthGoal?.toLowerCase().replace(/[_\s]/g, '');
+      console.log('🔵 Debug Goal Normalization:', { 
+        original: userData.healthGoal, 
+        normalized: normalizedGoal,
+        matches_weightloss: normalizedGoal === 'weightloss'
+      });
       
       if (normalizedGoal === 'weightloss') {
         tdee -= 500; // 500 calorie deficit
+        console.log('🔵 Applied Weight Loss deficit. New TDEE:', tdee);
       } else if (normalizedGoal === 'weightgain') {
         tdee += 500; // 500 calorie surplus
+        console.log('🔵 Applied Weight Gain surplus. New TDEE:', tdee);
+      } else {
+        console.log('🔵 No calorie adjustment (Weight Maintenance). TDEE remains:', tdee);
       }
       
       calorieGoal = Math.round(tdee);
