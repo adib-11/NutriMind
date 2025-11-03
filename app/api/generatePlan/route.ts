@@ -1,7 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { GeneratePlanRequest, GeneratePlanResponse, Meal, ApiError } from '@/types/index';
+import { GeneratePlanRequest, GeneratePlanResponse, Meal, ApiError, Ingredient } from '@/types/index';
 import mealsData from '@/data/meals.json';
+import ingredientsData from '@/data/ingredients.json';
+
+function checkIngredientAllergies(
+  meal: Meal,
+  allergyString: string,
+  allIngredients: Ingredient[]
+): boolean {
+  if (!allergyString || allergyString.trim() === '') {
+    return false;
+  }
+
+  const allergens = allergyString
+    .toLowerCase()
+    .split(',')
+    .map((a) => a.trim())
+    .filter((a) => a.length > 0);
+
+  if (allergens.length === 0) {
+    return false;
+  }
+
+  const ingredientMap = new Map(allIngredients.map((ing) => [ing.id, ing]));
+
+  for (const mealIng of meal.ingredients) {
+    const ingredient = ingredientMap.get(mealIng.ingredient_id);
+    if (ingredient) {
+      const ingredientName = ingredient.name.toLowerCase();
+      const hasAllergen = allergens.some((allergen) => ingredientName.includes(allergen));
+
+      if (hasAllergen) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -10,6 +47,7 @@ export async function POST(request: NextRequest) {
   try {
     // Task 4: Load and Parse meals.json
     const allMeals: Meal[] = mealsData.meals;
+    const allIngredients: Ingredient[] = ingredientsData as Ingredient[];
     
     if (!allMeals || allMeals.length === 0) {
       throw new Error('Failed to load meals data');
@@ -121,8 +159,38 @@ export async function POST(request: NextRequest) {
       fat: `${fatTarget}g (${fatPercent * 100}%)`
     });
 
+    // Pre-filter meals to exclude allergen ingredients
+    let safeForUserMeals = allMeals;
+
+    if (userData.allergies && userData.allergies.trim() !== '') {
+      safeForUserMeals = allMeals.filter(
+        (meal) => !checkIngredientAllergies(meal, userData.allergies, allIngredients)
+      );
+
+      console.log(`🔵 Allergy filtering: ${allMeals.length} total meals, ${safeForUserMeals.length} safe for user`);
+      console.log(`🔵 User allergies: ${userData.allergies}`);
+
+      if (safeForUserMeals.length === 0) {
+        return NextResponse.json(
+          {
+            error: 'No meals available that meet your allergy requirements. Please adjust your preferences.'
+          } as ApiError,
+          { status: 400 }
+        );
+      }
+    }
+
+    if (userData.allergies) {
+      console.log('🔵 Allergy filtering results:', {
+        totalMeals: allMeals.length,
+        safeForUser: safeForUserMeals.length,
+        allergies: userData.allergies,
+        removedCount: allMeals.length - safeForUserMeals.length
+      });
+    }
+
     // Pre-filter meals based on health constraints BEFORE sending to AI
-    let eligibleMeals = [...allMeals];
+    let eligibleMeals = [...safeForUserMeals];
     
     // Filter for vegetarian if required
     if (userData.isVegetarian) {
@@ -172,7 +240,9 @@ export async function POST(request: NextRequest) {
     }));
 
     // Task 7: Construct Gemini AI Prompt (Enhanced with comprehensive user profile)
-    const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
+  const randomSeed = Date.now();
+
+  const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
 
 USER PROFILE ANALYSIS:
 - Age: ${userData.age || 'Not provided'} years
@@ -209,7 +279,19 @@ ${userData.healthConditions.includes('Diabetes') ? `- Diabetes: All meals pre-fi
 CRITICAL BUDGET CONSTRAINT: The total cost of all 4 selected meals MUST be under ${userData.budget} BDT. Check the cost_bdt field for each meal and ensure the sum is below ${userData.budget}.
 
 AVAILABLE MEALS (pre-filtered):
-${JSON.stringify(simplifiedMeals)}
+${JSON.stringify(simplifiedMeals, null, 2)}
+
+${userData.allergies ? `NOTE: The meals listed above have been pre-filtered to exclude ingredients the user is allergic to (${userData.allergies}).
+` : ''}
+
+VARIETY & SELECTION RULES:
+1. Prioritize ingredient diversity - avoid selecting meals with too many overlapping ingredients
+2. Vary protein sources across meals (e.g., don't select 4 chicken-based meals or 4 lentil-based meals)
+3. Include a mix of traditional Bangladeshi meals and diverse options
+4. Balance between different meal tags (e.g., mix "budget_friendly" with "high_protein" meals)
+5. Random seed for this generation: ${randomSeed} - Use this to vary your selection each time
+
+IMPORTANT: Do NOT repeatedly select the same meals. Explore different combinations from the available meal database to provide variety.
 
 OUTPUT FORMAT:
 Return ONLY a JSON array of exactly 4 meal_id strings.
@@ -284,7 +366,7 @@ Return ONLY the JSON array with no explanation or additional text.`;
     }
 
     // Task 10: Filter Meals by ID
-    const selectedMeals = allMeals.filter(meal => selectedMealIds.includes(meal.meal_id));
+    const selectedMeals = safeForUserMeals.filter(meal => selectedMealIds.includes(meal.meal_id));
     
     if (selectedMeals.length === 0) {
       throw new Error('No valid meal plan could be generated');
@@ -328,6 +410,9 @@ Return ONLY the JSON array with no explanation or additional text.`;
     if (totalSelectedCost > userData.budget) {
       console.warn('⚠️ Fallback selection exceeded budget.', { totalSelectedCost, budget: userData.budget });
     }
+
+    console.log('🔵 AI selected meals:', selectedMealIds);
+    console.log('🔵 Meal names:', selectedMeals.map(m => m.name_en));
 
     console.log('🔵 Final meal assignments by type:', {
       Breakfast: normalizedMeals[0]?.meal_id,
