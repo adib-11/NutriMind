@@ -251,7 +251,7 @@ Return ONLY the JSON array with no explanation or additional text.`;
       
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: 'gemini-pro',  // Use stable Gemini Pro model
+        model: 'gemini-2.0-flash-exp',  // Use experimental flash model (free tier)
         generationConfig: {
           temperature: 0.5,  // Lower temperature for more focused, deterministic responses
           maxOutputTokens: 200,  // Increased to allow AI to consider constraints better
