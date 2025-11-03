@@ -22,6 +22,14 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
   const totalCalories = meals.reduce((sum, meal) => sum + meal.total_nutrition.calories, 0);
   const totalCost = meals.reduce((sum, meal) => sum + meal.total_cost_bdt, 0);
 
+  // Determine intended meal type based on position (AI returns in order: Breakfast, Lunch, Dinner, Snack)
+  const getIntendedMealType = (meal: Meal, index: number): string => {
+    const expectedOrder = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+    const expectedType = expectedOrder[index];
+    // Return the expected type if it exists in the meal's meal_type array, otherwise use first available
+    return meal.meal_type.includes(expectedType) ? expectedType : meal.meal_type[0];
+  };
+
   // Progress messages that cycle during loading
   const loadingMessages = [
     'Generating a fresh meal plan...',
@@ -142,7 +150,9 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
 
       {/* Meal Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {meals.map((meal) => (
+        {meals.map((meal, index) => {
+          const intendedMealType = getIntendedMealType(meal, index);
+          return (
           <Card key={meal.meal_id} className="border-gray-200">
             <CardHeader>
               <div className="flex justify-between items-start gap-2">
@@ -150,8 +160,8 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
                   <CardTitle className="text-xl text-gray-900">{meal.name_en}</CardTitle>
                   <p className="text-sm text-gray-600 mt-1">{meal.name_bn}</p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getMealTypeBadgeColor(meal.meal_type[0])}`}>
-                  {meal.meal_type[0]}
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getMealTypeBadgeColor(intendedMealType)}`}>
+                  {intendedMealType}
                 </span>
               </div>
             </CardHeader>
@@ -188,7 +198,8 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
               </div>
             </CardContent>
           </Card>
-        ))}
+          );
+        })}
       </div>
 
       {/* Summary Section */}
