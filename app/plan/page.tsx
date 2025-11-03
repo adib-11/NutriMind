@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function MealPlanPage() {
   const router = useRouter();
-  const { mealPlan, age, gender, weight, height, activityLevel, healthGoal } = useUserStore();
+  const { mealPlan, debugInfo, age, gender, weight, height, activityLevel, healthGoal } = useUserStore();
 
   // Calculate BMR, TDEE, and macros
   const calculations = useMemo(() => {
@@ -136,6 +136,62 @@ export default function MealPlanPage() {
                     <p className="text-lg font-bold text-purple-600">{calculations.fatTarget}g</p>
                     <p className="text-xs text-gray-600">Fat ({calculations.fatPercent}%)</p>
                   </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Debug Info Panel for Testing Story 1.6 */}
+        {debugInfo && (
+          <Card className="mb-6 border-orange-300 bg-orange-50">
+            <CardHeader>
+              <CardTitle className="text-xl text-gray-900">🧪 Debug Info (Story 1.6 Testing)</CardTitle>
+              <p className="text-sm text-gray-600 mt-1">
+                This panel shows allergy filtering and meal selection details. Remove this after testing is complete.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Allergy Filtering Results */}
+                <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange-500">
+                  <h4 className="font-bold text-gray-900 mb-2">🔍 Allergy Filtering</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                    <div>
+                      <p className="text-gray-600">Total Meals</p>
+                      <p className="text-lg font-bold text-gray-900">{debugInfo.totalMeals}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Safe for User</p>
+                      <p className="text-lg font-bold text-green-600">{debugInfo.safeForUser}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">Filtered Out</p>
+                      <p className="text-lg font-bold text-red-600">{debugInfo.removedCount}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600">User Allergies</p>
+                      <p className="text-sm font-semibold text-orange-600">{debugInfo.allergies}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Selection Results */}
+                <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                  <h4 className="font-bold text-gray-900 mb-2">🤖 AI Selected Meals</h4>
+                  <div className="space-y-2">
+                    {debugInfo.selectedMealNames && debugInfo.selectedMealNames.map((name, idx) => (
+                      <div key={idx} className="flex items-center justify-between text-sm bg-blue-50 p-2 rounded">
+                        <span className="font-medium text-gray-900">{name}</span>
+                        <span className="text-xs text-gray-500 font-mono">{debugInfo.selectedMealIds?.[idx]}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Timestamp */}
+                <div className="text-xs text-gray-500 text-right">
+                  Generation Timestamp: {new Date(debugInfo.timestamp || 0).toLocaleString()}
                 </div>
               </div>
             </CardContent>

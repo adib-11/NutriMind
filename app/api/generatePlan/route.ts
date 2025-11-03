@@ -426,7 +426,20 @@ Return ONLY the JSON array with no explanation or additional text.`;
     const totalTime = Date.now() - startTime;
     console.log(`⏱️ Total API execution time: ${totalTime}ms (${(totalTime / 1000).toFixed(2)}s)`);
     
-    return NextResponse.json(normalizedMeals as GeneratePlanResponse, { status: 200 });
+    // Prepare debug info for UI display
+    const debugInfo = {
+      totalMeals: allMeals.length,
+      safeForUser: safeForUserMeals.length,
+      allergies: userData.allergies || 'None',
+      removedCount: allMeals.length - safeForUserMeals.length,
+      selectedMealIds: selectedMealIds,
+      selectedMealNames: normalizedMeals.map(m => m.name_en),
+      timestamp: Date.now()
+    };
+    
+    const response = NextResponse.json(normalizedMeals as GeneratePlanResponse, { status: 200 });
+    response.headers.set('X-Debug-Info', JSON.stringify(debugInfo));
+    return response;
 
   } catch (error) {
     // Task 12: Implement Error Handling

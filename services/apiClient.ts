@@ -1,8 +1,21 @@
 import { type GeneratePlanRequest, type GeneratePlanResponse } from '@/types';
 
+interface MealPlanWithDebug {
+  meals: GeneratePlanResponse;
+  debugInfo: {
+    totalMeals: number;
+    safeForUser: number;
+    allergies: string;
+    removedCount: number;
+    selectedMealIds: string[];
+    selectedMealNames: string[];
+    timestamp: number;
+  } | null;
+}
+
 export const getMealPlan = async (
   requestData: GeneratePlanRequest
-): Promise<GeneratePlanResponse> => {
+): Promise<MealPlanWithDebug> => {
   const response = await fetch('/api/generatePlan', {
     method: 'POST',
     headers: {
@@ -16,5 +29,11 @@ export const getMealPlan = async (
     throw new Error(errorData.error || 'Failed to generate meal plan');
   }
 
-  return response.json();
+  const meals = await response.json();
+  
+  // Extract debug info from response headers
+  const debugHeader = response.headers.get('X-Debug-Info');
+  const debugInfo = debugHeader ? JSON.parse(debugHeader) : null;
+
+  return { meals, debugInfo };
 };

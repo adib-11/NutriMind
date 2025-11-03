@@ -26,7 +26,7 @@ export default function PreferencesForm() {
   const [error, setError] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState('');
   const userStore = useUserStore();
-  const { healthConditions, allergies, budget, isVegetarian, setData, setMealPlan } = userStore;
+  const { healthConditions, allergies, budget, isVegetarian, setData, setMealPlan, setDebugInfo } = userStore;
 
   // Progress messages that cycle during loading
   const loadingMessages = [
@@ -85,12 +85,13 @@ export default function PreferencesForm() {
       console.log('Sending user data to API:', userData);
 
       // Call API to generate meal plan
-      const mealPlan = await getMealPlan(userData);
+      const response = await getMealPlan(userData);
 
-      console.log('Received meal plan:', mealPlan);
+      console.log('Received meal plan:', response);
 
-      // Store meal plan in Zustand
-      setMealPlan(mealPlan);
+      // Store meal plan and debug info in Zustand
+      setMealPlan(response.meals);
+      setDebugInfo(response.debugInfo);
 
       // Navigate to meal plan page
       router.push('/plan');

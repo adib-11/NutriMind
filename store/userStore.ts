@@ -15,11 +15,24 @@ interface UserData {
   isVegetarian: boolean;
 }
 
+// Debug info for testing Story 1.6
+interface DebugInfo {
+  totalMeals?: number;
+  safeForUser?: number;
+  allergies?: string;
+  removedCount?: number;
+  selectedMealIds?: string[];
+  selectedMealNames?: string[];
+  timestamp?: number;
+}
+
 // Defines the store's actions
 interface UserStore extends UserData {
   mealPlan: Meal[];
+  debugInfo: DebugInfo | null;
   setData: (data: Partial<UserData>) => void;
   setMealPlan: (plan: Meal[]) => void;
+  setDebugInfo: (info: DebugInfo | null) => void;
   reset: () => void;
 }
 
@@ -33,7 +46,9 @@ const initialState: UserData = {
 export const useUserStore = create<UserStore>((set) => ({
   ...initialState,
   mealPlan: [],
+  debugInfo: null,
   setData: (data) => set((state) => ({ ...state, ...data })),
   setMealPlan: (plan) => set({ mealPlan: plan }),
-  reset: () => set({ ...initialState, mealPlan: [] }),
+  setDebugInfo: (info) => set({ debugInfo: info }),
+  reset: () => set({ ...initialState, mealPlan: [], debugInfo: null }),
 }));
