@@ -4,6 +4,7 @@ import { GeneratePlanRequest, GeneratePlanResponse, Meal, ApiError } from '@/typ
 import mealsData from '@/data/meals.json';
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
   console.log('🔵 API Route: POST /api/generatePlan called');
   
   try {
@@ -265,10 +266,15 @@ Do not include any explanation or additional text. Just the JSON array.`;
     }
 
     // Task 11: Return Success Response
+    const totalTime = Date.now() - startTime;
+    console.log(`⏱️ Total API execution time: ${totalTime}ms (${(totalTime / 1000).toFixed(2)}s)`);
+    
     return NextResponse.json(selectedMeals as GeneratePlanResponse, { status: 200 });
 
   } catch (error) {
     // Task 12: Implement Error Handling
+    const totalTime = Date.now() - startTime;
+    console.log(`⏱️ API failed after: ${totalTime}ms (${(totalTime / 1000).toFixed(2)}s)`);
     console.error('Error generating meal plan:', error);
     return NextResponse.json(
       { error: 'Failed to generate meal plan' } as ApiError,
