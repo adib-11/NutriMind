@@ -33,6 +33,7 @@ interface UserStore extends UserData {
   setData: (data: Partial<UserData>) => void;
   setMealPlan: (plan: Meal[]) => void;
   setDebugInfo: (info: DebugInfo | null) => void;
+  updateMeal: (mealType: string, newMeal: Meal) => void;
   reset: () => void;
 }
 
@@ -50,5 +51,10 @@ export const useUserStore = create<UserStore>((set) => ({
   setData: (data) => set((state) => ({ ...state, ...data })),
   setMealPlan: (plan) => set({ mealPlan: plan }),
   setDebugInfo: (info) => set({ debugInfo: info }),
+  updateMeal: (mealType, newMeal) => set((state) => ({
+    mealPlan: state.mealPlan.map((meal) =>
+      meal.meal_type.map(t => t.toLowerCase()).includes(mealType.toLowerCase()) ? newMeal : meal
+    ),
+  })),
   reset: () => set({ ...initialState, mealPlan: [], debugInfo: null }),
 }));

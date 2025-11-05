@@ -67,3 +67,22 @@ export interface ChatMessage {
   mealSuggestions?: Meal[]; // Optional: Used in Story 2.2 for meal replacements
 }
 
+// Story 2.2: Meal Replacement API Types
+export interface SwapMealRequest {
+  message: string; // User's replacement request (e.g., "I don't want eggs")
+  currentMealId: string; // ID of meal to replace
+  mealType: string; // "breakfast" | "lunch" | "dinner" | "snack"
+  userProfile: {
+    allergies: string; // Comma-separated allergies
+    isVegetarian: boolean;
+    healthConditions: string[]; // e.g., ["Diabetes", "Hypertension"]
+    budget: number; // Weekly budget in BDT
+    calorieGoal?: number; // Optional daily calorie target
+  };
+}
+
+export interface SwapMealResponse {
+  suggestions: Meal[]; // 2-3 alternative meals
+  explanation: string; // AI-generated explanation
+}
+
