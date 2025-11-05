@@ -2,11 +2,11 @@
 // This file must be imported by both frontend and API routes
 
 export interface Ingredient {
-  id: string; // e.g., "ING_001"
-  name: string; // e.g., "Rice (Miniket)"
+  ingredient_id: string; // e.g., "ING_001"
+  name_en: string; // e.g., "Rice (Miniket)"
   name_bn: string; // e.g., "চাল (মিনিকেট)"
   unit: 'kg' | 'g' | 'piece' | 'bundle' | 'litre' | 'ml' | '100g';
-  price_bdt: number; // Price in BDT for one unit
+  price_bdt_per_unit: number; // Price in BDT for one unit
 }
 
 export interface MealIngredient {
@@ -20,18 +20,22 @@ export interface Meal {
   name_en: string; // English name
   name_bn: string; // Bengali name
   meal_type: string[]; // e.g., ["Lunch", "Dinner"]
-  prep_time_min: number;
-  ingredients: MealIngredient[];
+  description?: string; // Optional description
+  prep_time_min?: number; // Optional prep time
+  ingredients?: MealIngredient[]; // Optional ingredients list
   total_nutrition: {
     calories: number;
     protein_g: number;
     carbs_g: number;
     fat_g: number;
     sodium_mg: number;
+    fiber_g?: number; // Optional fiber
     sugar_g: number;
   };
   total_cost_bdt: number;
-  tags: string[]; // e.g., ["vegetarian", "low_cost", "diabetic_friendly"]
+  tags: string[]; // e.g., ["vegetarian", "low_cost", "traditional"]
+  meal_difficulty?: string; // e.g., "Easy", "Medium", "Hard"
+  suitability_tags?: string[]; // e.g., ["diabetic_friendly", "hypertension_friendly"]
 }
 
 // API Request/Response Types for generatePlan endpoint

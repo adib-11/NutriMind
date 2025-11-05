@@ -12,6 +12,11 @@ function checkIngredientAllergies(
   if (!allergyString || allergyString.trim() === '') {
     return false;
   }
+  
+  // If meal doesn't have ingredients list, we can't check
+  if (!meal.ingredients || meal.ingredients.length === 0) {
+    return false; // Can't verify, so don't exclude
+  }
 
   const allergens = allergyString
     .toLowerCase()
@@ -23,12 +28,12 @@ function checkIngredientAllergies(
     return false;
   }
 
-  const ingredientMap = new Map(allIngredients.map((ing) => [ing.id, ing]));
+  const ingredientMap = new Map(allIngredients.map((ing) => [ing.ingredient_id, ing]));
 
   for (const mealIng of meal.ingredients) {
     const ingredient = ingredientMap.get(mealIng.ingredient_id);
     if (ingredient) {
-      const ingredientName = ingredient.name.toLowerCase();
+      const ingredientName = ingredient.name_en.toLowerCase();
       const hasAllergen = allergens.some((allergen) => ingredientName.includes(allergen));
 
       if (hasAllergen) {
@@ -47,11 +52,18 @@ export async function POST(request: NextRequest) {
   try {
     // Task 4: Load and Parse meals.json
     const allMeals: Meal[] = mealsData.meals;
-    const allIngredients: Ingredient[] = ingredientsData as Ingredient[];
+    const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
+    const allIngredients: Ingredient[] = ingredientsDataImport.ingredients;
     
     if (!allMeals || allMeals.length === 0) {
       throw new Error('Failed to load meals data');
     }
+    
+    if (!allIngredients || allIngredients.length === 0) {
+      throw new Error('Failed to load ingredients data');
+    }
+    
+    console.log(`🔵 Loaded ${allMeals.length} meals and ${allIngredients.length} ingredients`);
 
     // Task 5: Parse Request Body
     const userData: GeneratePlanRequest = await request.json();
@@ -192,28 +204,29 @@ export async function POST(request: NextRequest) {
     // Pre-filter meals based on health constraints BEFORE sending to AI
     let eligibleMeals = [...safeForUserMeals];
     
+    // Helper function to check if a meal has a tag in either tags or suitability_tags
+    const mealHasTag = (meal: Meal, tag: string): boolean => {
+      return meal.tags.includes(tag) || (meal.suitability_tags?.includes(tag) ?? false);
+    };
+    
     // Filter for vegetarian if required
     if (userData.isVegetarian) {
-      eligibleMeals = eligibleMeals.filter(meal => 
-        meal.tags.includes('vegetarian')
-      );
+      eligibleMeals = eligibleMeals.filter(meal => mealHasTag(meal, 'vegetarian'));
       console.log('🔵 Filtered for vegetarian:', eligibleMeals.length, 'meals remaining');
     }
     
     // Filter for diabetes if required (frontend sends 'Diabetes')
     if (userData.healthConditions.includes('Diabetes')) {
-      eligibleMeals = eligibleMeals.filter(meal => 
-        meal.tags.includes('diabetic_friendly')
-      );
+      eligibleMeals = eligibleMeals.filter(meal => mealHasTag(meal, 'diabetic_friendly'));
       console.log('🔵 Filtered for diabetic_friendly:', eligibleMeals.length, 'meals remaining');
     }
     
     // Filter for hypertension if required
     if (userData.healthConditions.includes('Hypertension')) {
       eligibleMeals = eligibleMeals.filter(meal => 
-        meal.tags.includes('low_sodium')
+        mealHasTag(meal, 'low_sodium') || mealHasTag(meal, 'hypertension_friendly')
       );
-      console.log('🔵 Filtered for low_sodium:', eligibleMeals.length, 'meals remaining');
+      console.log('🔵 Filtered for low_sodium/hypertension_friendly:', eligibleMeals.length, 'meals remaining');
     }
     
     // Check if we have enough meals after filtering

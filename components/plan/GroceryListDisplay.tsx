@@ -19,7 +19,8 @@ interface AggregatedIngredient {
 
 export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
   const router = useRouter();
-  const allIngredients = ingredientsData as Ingredient[];
+  const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
+  const allIngredients = ingredientsDataImport.ingredients;
 
   // Aggregate ingredients from all meals
   const aggregatedIngredients = useMemo(() => {
@@ -27,9 +28,14 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
 
     // Loop through all meals and their ingredients
     meals.forEach((meal) => {
+      // Skip meals without ingredients list
+      if (!meal.ingredients || meal.ingredients.length === 0) {
+        return;
+      }
+      
       meal.ingredients.forEach((mealIngredient) => {
         const ingredientDetails = allIngredients.find(
-          (ing) => ing.id === mealIngredient.ingredient_id
+          (ing) => ing.ingredient_id === mealIngredient.ingredient_id
         );
 
         if (!ingredientDetails) {
@@ -55,7 +61,7 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
 
           existing.totalQuantity += additionalQuantity;
           // Recalculate cost
-          existing.cost = existing.totalQuantity * ingredientDetails.price_bdt;
+          existing.cost = existing.totalQuantity * ingredientDetails.price_bdt_per_unit;
         } else {
           // Create new entry
           let quantity = mealIngredient.quantity;
@@ -74,7 +80,7 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
             ingredient: ingredientDetails,
             totalQuantity: quantity,
             unit: unit,
-            cost: quantity * ingredientDetails.price_bdt,
+            cost: quantity * ingredientDetails.price_bdt_per_unit,
           });
         }
       });
@@ -111,11 +117,11 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
           <div className="space-y-3">
             {aggregatedIngredients.map((item) => (
               <div
-                key={item.ingredient.id}
+                key={item.ingredient.ingredient_id}
                 className="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">{item.ingredient.name}</h3>
+                  <h3 className="font-semibold text-gray-900">{item.ingredient.name_en}</h3>
                   <p className="text-sm text-gray-600">{item.ingredient.name_bn}</p>
                 </div>
                 <div className="text-right mr-6">
