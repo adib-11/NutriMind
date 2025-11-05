@@ -53,6 +53,13 @@ Provide a helpful, accurate, brief answer (2-4 sentences) about:
 - Cultural/local context for Bangladeshi cuisine
 - Practical cooking or dietary advice
 
+IMPORTANT FORMATTING RULES:
+- Write in plain conversational text - NO markdown formatting
+- Do NOT use asterisks (*), underscores (_), or other markdown symbols
+- Do NOT use bold, italics, or special formatting
+- Just write naturally as if speaking to the user
+- Use quotation marks for emphasis if needed (e.g., "nashta" instead of *nashta*)
+
 Keep your answer under 150 words. Be friendly, conversational, and culturally relevant to Bangladesh.`;
 
     // Add conversation history if provided (AC6)
