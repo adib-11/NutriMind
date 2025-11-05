@@ -1,14 +1,20 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 import MealPlanDisplay from '@/components/plan/MealPlanDisplay';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FloatingChatButton } from '@/components/chatbot/FloatingChatButton';
+import { ChatbotModal } from '@/components/chatbot/ChatbotModal';
 
 export default function MealPlanPage() {
   const router = useRouter();
   const { mealPlan, debugInfo, age, gender, weight, height, activityLevel, healthGoal } = useUserStore();
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  // Feature flag check
+  const isChatbotEnabled = process.env.NEXT_PUBLIC_ENABLE_CHATBOT !== 'false';
 
   // Calculate BMR, TDEE, and macros
   const calculations = useMemo(() => {
@@ -199,6 +205,20 @@ export default function MealPlanPage() {
         )}
 
         <MealPlanDisplay meals={mealPlan} />
+
+        {/* Chatbot Components (Story 2.1) */}
+        {isChatbotEnabled && (
+          <>
+            <FloatingChatButton onClick={() => {
+              console.log('[ChatBot] Modal opened');
+              setIsChatbotOpen(true);
+            }} />
+            <ChatbotModal
+              isOpen={isChatbotOpen}
+              onClose={() => setIsChatbotOpen(false)}
+            />
+          </>
+        )}
       </div>
     </div>
   );

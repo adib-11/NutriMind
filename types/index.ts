@@ -58,3 +58,12 @@ export interface ApiError {
   error: string; // e.g., "Failed to generate meal plan"
 }
 
+// Chat message structure for AI chatbot (Story 2.1)
+export interface ChatMessage {
+  id: string; // Unique ID: `msg_${Date.now()}`
+  role: 'user' | 'assistant'; // Message sender
+  content: string; // Message text
+  timestamp: Date; // When message was sent
+  mealSuggestions?: Meal[]; // Optional: Used in Story 2.2 for meal replacements
+}
+
