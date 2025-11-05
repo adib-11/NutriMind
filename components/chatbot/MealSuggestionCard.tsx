@@ -11,9 +11,9 @@ interface MealSuggestionCardProps {
 
 export function MealSuggestionCard({ meal, onSelect }: MealSuggestionCardProps) {
   return (
-    <Card className="p-4 hover:shadow-md transition-shadow">
-      <h4 className="font-semibold text-lg">{meal.name_en}</h4>
-      <div className="flex justify-between mt-2 text-sm text-gray-600">
+    <Card className="p-4 hover:shadow-md transition-shadow bg-white">
+      <h4 className="font-semibold text-lg text-gray-900">{meal.name_en}</h4>
+      <div className="flex justify-between mt-2 text-sm text-gray-700">
         <span>{meal.total_nutrition.calories} cal</span>
         <span>৳{meal.total_cost_bdt}</span>
       </div>
@@ -26,7 +26,7 @@ export function MealSuggestionCard({ meal, onSelect }: MealSuggestionCardProps) 
       </div>
       <button
         onClick={() => onSelect(meal)}
-        className="w-full mt-3 bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-md hover:from-green-700 hover:to-blue-700 transition-colors"
+        className="w-full mt-3 bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-md hover:from-green-700 hover:to-blue-700 transition-colors font-medium"
       >
         Select This Meal
       </button>
