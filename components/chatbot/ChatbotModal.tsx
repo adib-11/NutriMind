@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Minus } from 'lucide-react';
-import { type ChatMessage, type Meal, type SwapMealRequest, type SwapMealResponse } from '@/types';
+import { type ChatMessage, type Meal, type SwapMealRequest, type SwapMealResponse, type QuestionRequest, type QuestionResponse } from '@/types';
 import { cn } from '@/lib/utils';
 import { useUserStore } from '@/store/userStore';
 import { MealSuggestionCard } from './MealSuggestionCard';
@@ -65,6 +65,81 @@ export function ChatbotModal({ isOpen, onClose }: ChatbotModalProps) {
     return { isMealSwap: true, mealType: detectedMealType, currentMealId: currentMeal.meal_id };
   };
 
+  // Detect question intent from user message (AC2)
+  const detectQuestionIntent = (message: string): boolean => {
+    const lowerMessage = message.toLowerCase();
+    
+    // Check for meal swap keywords
+    const swapKeywords = ['replace', 'change', 'swap', "don't want", "not want"];
+    const isMealSwap = swapKeywords.some(keyword => lowerMessage.includes(keyword));
+    
+    // Check for question words
+    const questionWords = ['what', 'why', 'how', 'is', 'are', 'can', 'should', 'does', 'do'];
+    const hasQuestionWord = questionWords.some(word => lowerMessage.includes(word));
+    
+    // Treat as question if: has question word AND NOT meal swap
+    return hasQuestionWord && !isMealSwap;
+  };
+
+  // Handle Q&A questions (AC3, 4, 6)
+  const handleQuestion = async (message: string) => {
+    try {
+      console.log('[ChatBot] Question intent detected:', message);
+      
+      // Get user context from Zustand store
+      const currentUserData = useUserStore.getState();
+      
+      // Prepare request with user context
+      const requestBody: QuestionRequest = {
+        message,
+        context: {
+          mealPlan: currentUserData.mealPlan,
+          healthConditions: currentUserData.healthConditions,
+        },
+        conversationHistory: messages.slice(-5), // Last 5 for context (AC6)
+      };
+      
+      console.log('[ChatBot] Calling ask-question API with context:', {
+        mealPlanCount: currentUserData.mealPlan.length,
+        healthConditions: currentUserData.healthConditions,
+        historyCount: messages.slice(-5).length
+      });
+      
+      // Call API
+      const response = await fetch('/api/chatbot/ask-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get answer');
+      }
+      
+      const data: QuestionResponse = await response.json();
+      console.log('[ChatBot] Question response received:', data.answer.substring(0, 50) + '...');
+      
+      // Add assistant response to chat
+      const assistantMessage: ChatMessage = {
+        id: `msg_${Date.now()}`,
+        role: 'assistant',
+        content: data.answer,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+      
+    } catch (error) {
+      console.error('[ChatBot] Question error:', error);
+      // Add error message to chat
+      setMessages(prev => [...prev, {
+        id: `msg_${Date.now()}`,
+        role: 'assistant',
+        content: "I'm having trouble answering that right now. Please try again.",
+        timestamp: new Date(),
+      }]);
+    }
+  };
+
   // Handle meal selection from suggestions
   const handleSelectMeal = (newMeal: Meal, mealType: string) => {
     console.log('[ChatBot] Meal selected:', newMeal.name_en);
@@ -124,9 +199,11 @@ export function ChatbotModal({ isOpen, onClose }: ChatbotModalProps) {
     setIsLoading(true);
 
     try {
-      // Detect meal swap intent
+      // Detect intents
       const swapIntent = detectMealSwapIntent(messageContent);
+      const isQuestion = detectQuestionIntent(messageContent);
 
+      // Route to appropriate handler
       if (swapIntent.isMealSwap && swapIntent.mealType && swapIntent.currentMealId) {
         // Call swap-meal API
         const requestBody: SwapMealRequest = {
@@ -166,19 +243,12 @@ export function ChatbotModal({ isOpen, onClose }: ChatbotModalProps) {
         };
 
         setMessages((prev) => [...prev, botMessage]);
+      } else if (isQuestion) {
+        // Handle as Q&A question (Story 2.3)
+        await handleQuestion(messageContent);
       } else {
-        // Regular chatbot response (not a swap request)
-        setTimeout(() => {
-          const botMessage: ChatMessage = {
-            id: `msg_${Date.now()}`,
-            role: 'assistant',
-            content: "I can help you replace meals from your plan. Try saying 'I don't want eggs in breakfast' or 'change my lunch'.",
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, botMessage]);
-          setIsLoading(false);
-        }, 500);
-        return;
+        // Fallback: treat as question
+        await handleQuestion(messageContent);
       }
     } catch (error) {
       console.error('[ChatBot] Error:', error);

@@ -86,3 +86,17 @@ export interface SwapMealResponse {
   explanation: string; // AI-generated explanation
 }
 
+// Story 2.3: Nutrition Q&A API Types
+export interface QuestionRequest {
+  message: string; // User's question
+  context?: {
+    mealPlan: Meal[]; // Current meal plan for context
+    healthConditions: string[]; // User's health conditions
+  };
+  conversationHistory?: ChatMessage[]; // Previous messages for follow-ups
+}
+
+export interface QuestionResponse {
+  answer: string; // AI-generated answer
+}
+
