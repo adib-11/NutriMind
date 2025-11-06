@@ -49,6 +49,53 @@ function getCategoryPlaceholder(ingredientName: string): string {
 }
 
 /**
+ * Extracts a better search query from complex meal names
+ * @param mealName - Full meal name (e.g., "White Rice with Masoor Dal, Aloo Bhorta & Egg Bhaji")
+ * @returns Simplified search query (e.g., "rice dal curry")
+ */
+function extractSearchQuery(mealName: string): string {
+  const name = mealName.toLowerCase();
+  
+  // Extract key food terms from the meal name
+  const foodTerms: string[] = [];
+  
+  // Check for main proteins
+  if (name.includes('chicken')) foodTerms.push('chicken');
+  if (name.includes('fish') || name.includes('maach')) foodTerms.push('fish');
+  if (name.includes('egg') || name.includes('dim')) foodTerms.push('egg');
+  if (name.includes('beef') || name.includes('meat')) foodTerms.push('meat');
+  if (name.includes('prawn') || name.includes('chingri')) foodTerms.push('prawn');
+  
+  // Check for main carbs
+  if (name.includes('rice') || name.includes('bhat')) foodTerms.push('rice');
+  if (name.includes('paratha') || name.includes('roti') || name.includes('naan')) foodTerms.push('flatbread');
+  if (name.includes('khichuri')) foodTerms.push('khichuri');
+  
+  // Check for dal/lentils
+  if (name.includes('dal') || name.includes('lentil')) foodTerms.push('dal');
+  
+  // Check for vegetables
+  if (name.includes('aloo') || name.includes('potato')) foodTerms.push('potato');
+  if (name.includes('begun') || name.includes('eggplant')) foodTerms.push('eggplant');
+  if (name.includes('bhaji') || name.includes('bhorta')) foodTerms.push('curry');
+  
+  // Check for specific dishes
+  if (name.includes('biryani')) return 'biryani rice';
+  if (name.includes('curry') || name.includes('tarkari')) foodTerms.push('curry');
+  if (name.includes('korma')) return 'korma curry';
+  if (name.includes('bhuna')) return 'curry dish';
+  
+  // If we found specific terms, combine them
+  if (foodTerms.length > 0) {
+    return foodTerms.slice(0, 3).join(' '); // Use up to 3 terms
+  }
+  
+  // Fallback: extract first meaningful word
+  const words = name.replace(/\s*\([^)]*\)/g, '').split(/[,&]/)[0].trim();
+  return words || 'food';
+}
+
+/**
  * Fetches food image from Unsplash API with localStorage caching
  * @param ingredientName - Name of ingredient/meal (e.g., "Rice", "Chicken Curry")
  * @returns Promise<string> - Image URL or placeholder path
@@ -63,7 +110,7 @@ export async function getIngredientImage(ingredientName: string): Promise<string
   // Simplify ingredient name for better search results (remove qualifiers in parentheses)
   const simplifiedName = ingredientName.replace(/\s*\([^)]*\)/g, '').trim();
   
-  // Check localStorage cache first
+  // Check localStorage cache first (use original name for cache key)
   const cacheKey = `img_${simplifiedName}`;
   
   try {
@@ -77,12 +124,15 @@ export async function getIngredientImage(ingredientName: string): Promise<string
     return getCategoryPlaceholder(ingredientName);
   }
 
+  // Extract better search query for complex meal names
+  const searchQuery = extractSearchQuery(simplifiedName);
+  
   // Fetch from Unsplash API
   try {
-    console.log('[unsplashClient] Fetching image for:', simplifiedName);
+    console.log('[unsplashClient] Fetching image for:', simplifiedName, '→ query:', searchQuery);
     
     const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(simplifiedName)}&per_page=1&orientation=landscape`,
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery + ' food')}&per_page=1&orientation=landscape`,
       {
         headers: {
           'Authorization': `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_KEY}`
@@ -108,7 +158,7 @@ export async function getIngredientImage(ingredientName: string): Promise<string
         
         return imageUrl;
       } else {
-        console.log('[unsplashClient] No results found for:', simplifiedName);
+        console.log('[unsplashClient] No results found for:', searchQuery);
       }
     } else {
       console.warn('[unsplashClient] API request failed:', response.status);
@@ -118,5 +168,6 @@ export async function getIngredientImage(ingredientName: string): Promise<string
   }
 
   // Fallback to category placeholder
+  console.log('[unsplashClient] Using category placeholder for:', simplifiedName);
   return getCategoryPlaceholder(ingredientName);
 }
