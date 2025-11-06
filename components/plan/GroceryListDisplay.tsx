@@ -27,12 +27,19 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
   const aggregatedIngredients = useMemo(() => {
     const ingredientMap = new Map<string, AggregatedIngredient>();
 
+    // Track meals with/without ingredients for user notification
+    let mealsWithIngredients = 0;
+    let mealsWithoutIngredients = 0;
+
     // Loop through all meals and their ingredients
     meals.forEach((meal) => {
       // Skip meals without ingredients list
       if (!meal.ingredients || meal.ingredients.length === 0) {
+        mealsWithoutIngredients++;
+        console.warn(`Meal "${meal.name_en}" (${meal.meal_id}) does not have ingredients data`);
         return;
       }
+      mealsWithIngredients++;
       
       meal.ingredients.forEach((mealIngredient) => {
         const ingredientDetails = allIngredients.find(
@@ -87,6 +94,9 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
       });
     });
 
+    // Log summary for debugging
+    console.log(`Grocery List: ${mealsWithIngredients} meals with ingredients, ${mealsWithoutIngredients} without`);
+
     return Array.from(ingredientMap.values());
   }, [meals, allIngredients]);
 
@@ -95,6 +105,12 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
     (sum, item) => sum + item.cost,
     0
   );
+
+  // Count meals with/without ingredients for warning banner
+  const mealsWithoutIngredients = meals.filter(
+    meal => !meal.ingredients || meal.ingredients.length === 0
+  ).length;
+  const mealsWithIngredients = meals.length - mealsWithoutIngredients;
 
   return (
     <div className="space-y-6">
@@ -107,6 +123,27 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
           ← Back to Meal Plan
         </button>
       </div>
+
+      {/* Warning Banner if some meals don't have ingredients */}
+      {mealsWithoutIngredients > 0 && (
+        <Card className="border-yellow-300 bg-yellow-50">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-3">
+              <div className="text-yellow-600 text-2xl">⚠️</div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-yellow-900 mb-2">Incomplete Ingredient Data</h3>
+                <p className="text-sm text-yellow-800 mb-2">
+                  <strong>{mealsWithoutIngredients} out of {meals.length} meals</strong> do not have detailed ingredient information in our database yet.
+                </p>
+                <p className="text-sm text-yellow-800">
+                  This grocery list shows ingredients for <strong>{mealsWithIngredients} meal(s)</strong> only. 
+                  The total cost displayed is incomplete and may be significantly lower than actual grocery expenses.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Ingredients List */}
       <Card className="border-gray-200">
@@ -150,13 +187,25 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
       {/* Total Cost Summary */}
       <Card className="border-green-200 bg-green-50">
         <CardHeader>
-          <CardTitle className="text-xl text-gray-900">Total Grocery Cost</CardTitle>
+          <CardTitle className="text-xl text-gray-900">
+            {mealsWithoutIngredients > 0 ? 'Partial ' : ''}Total Grocery Cost
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between items-center">
-            <p className="text-lg text-gray-700">Estimated total for all ingredients</p>
+            <p className="text-lg text-gray-700">
+              {mealsWithoutIngredients > 0 
+                ? `Estimated for ${mealsWithIngredients} of ${meals.length} meals`
+                : 'Estimated total for all ingredients'
+              }
+            </p>
             <p className="text-4xl font-bold text-green-600">৳{totalGroceryCost.toFixed(2)}</p>
           </div>
+          {mealsWithoutIngredients > 0 && (
+            <p className="text-sm text-yellow-700 mt-3 italic">
+              ⚠️ This cost is incomplete. {mealsWithoutIngredients} meal(s) missing ingredient data.
+            </p>
+          )}
         </CardContent>
       </Card>
     </div>
