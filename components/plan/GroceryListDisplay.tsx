@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { type Meal, type Ingredient } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ingredientsData from '@/data/ingredients.json';
+import formatQuantity from '@/lib/formatQuantity';
 
 interface GroceryListDisplayProps {
   meals: Meal[];
@@ -115,7 +116,14 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {aggregatedIngredients.map((item) => (
+            {aggregatedIngredients.map((item) => {
+              const formattedQuantity = formatQuantity(
+                item.totalQuantity,
+                item.unit,
+                item.ingredient.name_en
+              );
+              
+              return (
               <div
                 key={item.ingredient.ingredient_id}
                 className="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
@@ -126,14 +134,15 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
                 </div>
                 <div className="text-right mr-6">
                   <p className="font-semibold text-gray-900">
-                    {item.totalQuantity.toFixed(2)} {item.unit}
+                    {formattedQuantity}
                   </p>
                 </div>
                 <div className="text-right min-w-[100px]">
                   <p className="font-semibold text-green-600">৳{item.cost.toFixed(2)}</p>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>

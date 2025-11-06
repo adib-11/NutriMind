@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { type Meal } from '@/types';
+import { type Meal, type Ingredient } from '@/types';
 import { getMealPlan } from '@/services/apiClient';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import formatQuantity from '@/lib/formatQuantity';
+import ingredientsData from '@/data/ingredients.json';
 
 interface MealPlanDisplayProps {
   meals: Meal[];
@@ -17,6 +19,10 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
   const [loadingMessage, setLoadingMessage] = useState('');
   const userStore = useUserStore();
   const { setMealPlan, setDebugInfo } = userStore;
+
+  // Import ingredients data
+  const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
+  const allIngredients = ingredientsDataImport.ingredients;
 
   // Calculate totals
   const totalCalories = meals.reduce((sum, meal) => sum + meal.total_nutrition.calories, 0);
@@ -167,6 +173,33 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Ingredients List */}
+              {meal.ingredients && meal.ingredients.length > 0 && (
+                <div className="border-b pb-4">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Ingredients</p>
+                  <ul className="space-y-1">
+                    {meal.ingredients.map((mealIngredient) => {
+                      const ingredientDetails = allIngredients.find(
+                        (ing) => ing.ingredient_id === mealIngredient.ingredient_id
+                      );
+                      if (!ingredientDetails) return null;
+                      
+                      const formattedQuantity = formatQuantity(
+                        mealIngredient.quantity,
+                        mealIngredient.unit,
+                        ingredientDetails.name_en
+                      );
+                      
+                      return (
+                        <li key={mealIngredient.ingredient_id} className="text-sm text-gray-600">
+                          {ingredientDetails.name_en} - {formattedQuantity}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
               {/* Nutrition Info */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
