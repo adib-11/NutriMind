@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { type Meal, type Ingredient } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ingredientsData from '@/data/ingredients.json';
 import formatQuantity from '@/lib/formatQuantity';
+import { getIngredientImage } from '@/lib/unsplashClient';
 
 interface GroceryListDisplayProps {
   meals: Meal[];
@@ -20,6 +22,7 @@ interface AggregatedIngredient {
 
 export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
   const router = useRouter();
+  const [ingredientIcons, setIngredientIcons] = useState<Record<string, string>>({});
   const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
   const allIngredients = ingredientsDataImport.ingredients;
 
@@ -112,6 +115,18 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
   ).length;
   const mealsWithIngredients = meals.length - mealsWithoutIngredients;
 
+  // Load ingredient icons
+  useEffect(() => {
+    const loadIcons = async () => {
+      const icons: Record<string, string> = {};
+      for (const item of aggregatedIngredients) {
+        icons[item.ingredient.ingredient_id] = await getIngredientImage(item.ingredient.name_en);
+      }
+      setIngredientIcons(icons);
+    };
+    loadIcons();
+  }, [aggregatedIngredients]);
+
   return (
     <div className="space-y-6">
       {/* Back Button */}
@@ -163,19 +178,36 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
               return (
               <div
                 key={item.ingredient.ingredient_id}
-                className="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">{item.ingredient.name_en}</h3>
-                  <p className="text-sm text-gray-600">{item.ingredient.name_bn}</p>
+                {/* Ingredient Icon */}
+                <div className="relative w-[60px] h-[60px] rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                  {!ingredientIcons[item.ingredient.ingredient_id] ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
+                  ) : (
+                    <Image 
+                      src={ingredientIcons[item.ingredient.ingredient_id]} 
+                      alt={item.ingredient.name_en}
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
-                <div className="text-right mr-6">
-                  <p className="font-semibold text-gray-900">
-                    {formattedQuantity}
-                  </p>
-                </div>
-                <div className="text-right min-w-[100px]">
-                  <p className="font-semibold text-green-600">৳{item.cost.toFixed(2)}</p>
+                {/* Ingredient Details */}
+                <div className="flex-1 flex justify-between items-center">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900">{item.ingredient.name_en}</h3>
+                    <p className="text-sm text-gray-600">{item.ingredient.name_bn}</p>
+                  </div>
+                  <div className="text-right mr-6">
+                    <p className="font-semibold text-gray-900">
+                      {formattedQuantity}
+                    </p>
+                  </div>
+                  <div className="text-right min-w-[100px]">
+                    <p className="font-semibold text-green-600">৳{item.cost.toFixed(2)}</p>
+                  </div>
                 </div>
               </div>
               );

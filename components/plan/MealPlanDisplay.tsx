@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { type Meal, type Ingredient } from '@/types';
 import { getMealPlan } from '@/services/apiClient';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import formatQuantity from '@/lib/formatQuantity';
+import { getIngredientImage } from '@/lib/unsplashClient';
 import ingredientsData from '@/data/ingredients.json';
 
 interface MealPlanDisplayProps {
@@ -17,6 +19,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [mealImages, setMealImages] = useState<Record<string, string>>({});
   const userStore = useUserStore();
   const { setMealPlan, setDebugInfo } = userStore;
 
@@ -44,6 +47,18 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
     'Balancing nutrition and budget...',
     'Almost done...',
   ];
+
+  // Load meal images
+  useEffect(() => {
+    const loadImages = async () => {
+      const images: Record<string, string> = {};
+      for (const meal of meals) {
+        images[meal.meal_id] = await getIngredientImage(meal.name_en);
+      }
+      setMealImages(images);
+    };
+    loadImages();
+  }, [meals]);
 
   useEffect(() => {
     if (isLoading) {
@@ -160,7 +175,21 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
         {meals.map((meal, index) => {
           const intendedMealType = getIntendedMealType(meal, index);
           return (
-          <Card key={meal.meal_id} className="border-gray-200">
+          <Card key={meal.meal_id} className="border-gray-200 overflow-hidden">
+            {/* Meal Image */}
+            <div className="relative w-full h-[150px] bg-gray-200">
+              {!mealImages[meal.meal_id] ? (
+                <div className="w-full h-full bg-gray-200 animate-pulse" />
+              ) : (
+                <Image 
+                  src={mealImages[meal.meal_id]} 
+                  alt={meal.name_en}
+                  fill
+                  className="object-cover"
+                  loading="lazy"
+                />
+              )}
+            </div>
             <CardHeader>
               <div className="flex justify-between items-start gap-2">
                 <div className="flex-1">

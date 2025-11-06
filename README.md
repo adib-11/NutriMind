@@ -2,6 +2,29 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Variables Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Required for AI meal plan generation (Story 1.3)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Required for food imagery (Story 2.5)
+# Get free API key from https://unsplash.com/developers
+# 1. Sign up at Unsplash
+# 2. Create a new application (Demo app)
+# 3. Copy the "Access Key" from your app dashboard
+NEXT_PUBLIC_UNSPLASH_KEY=your_unsplash_access_key_here
+
+# Feature flag for AI Chatbot (Story 2.1)
+NEXT_PUBLIC_ENABLE_CHATBOT=true
+```
+
+**Note:** Without the Unsplash API key, the app will use placeholder images instead of real food images.
+
+### Running the Development Server
+
 First, run the development server:
 
 ```bash
