@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GeneratePlanRequest, GeneratePlanResponse, Meal, ApiError, Ingredient } from '@/types/index';
 import mealsData from '@/data/meals.json';
 import ingredientsData from '@/data/ingredients.json';
+import { selectMealPlan } from '@/lib/mealPlanner';
 
 function checkIngredientAllergies(
   meal: Meal,
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
     let bmr = 0;
     let tdee = 0;
     
-    if (userData.age && userData.gender && userData.weight && userData.height && userData.activityLevel) {
+  if (userData.age && userData.gender && userData.weight && userData.height && userData.activityLevel) {
       // Simple BMR calculation (Mifflin-St Jeor)
       if (userData.gender.toLowerCase() === 'male') {
         bmr = 10 * userData.weight + 6.25 * userData.height - 5 * userData.age + 5;
@@ -201,8 +201,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Pre-filter meals based on health constraints BEFORE sending to AI
+    // Pre-filter meals based on health constraints BEFORE selecting plan
     let eligibleMeals = [...safeForUserMeals];
+
+    const normalizedHealthConditions = (userData.healthConditions || [])
+      .map((condition) => condition.trim())
+      .filter((condition) => condition.length > 0 && condition.toLowerCase() !== 'none');
     
     // Helper function to check if a meal has a tag in either tags or suitability_tags
     const mealHasTag = (meal: Meal, tag: string): boolean => {
@@ -216,13 +220,13 @@ export async function POST(request: NextRequest) {
     }
     
     // Filter for diabetes if required (frontend sends 'Diabetes')
-    if (userData.healthConditions.includes('Diabetes')) {
+  if (normalizedHealthConditions.includes('Diabetes')) {
       eligibleMeals = eligibleMeals.filter(meal => mealHasTag(meal, 'diabetic_friendly'));
       console.log('🔵 Filtered for diabetic_friendly:', eligibleMeals.length, 'meals remaining');
     }
     
     // Filter for hypertension if required
-    if (userData.healthConditions.includes('Hypertension')) {
+  if (normalizedHealthConditions.includes('Hypertension')) {
       eligibleMeals = eligibleMeals.filter(meal => 
         mealHasTag(meal, 'low_sodium') || mealHasTag(meal, 'hypertension_friendly')
       );
@@ -239,200 +243,34 @@ export async function POST(request: NextRequest) {
     
     console.log('🔵 Final eligible meals count:', eligibleMeals.length);
 
-    // Create a simplified meal list for AI (reduce prompt size for faster processing)
-    const simplifiedMeals = eligibleMeals.map(meal => ({
-      meal_id: meal.meal_id,
-      name_en: meal.name_en,
-      meal_type: meal.meal_type,
-      calories: meal.total_nutrition.calories,
-      protein_g: meal.total_nutrition.protein_g,
-      carbs_g: meal.total_nutrition.carbs_g,
-      fat_g: meal.total_nutrition.fat_g,
-      cost_bdt: meal.total_cost_bdt,
-      tags: meal.tags
-    }));
+    const selectionResult = selectMealPlan(eligibleMeals, {
+      calorieGoal,
+      proteinTarget,
+      carbsTarget,
+      fatTarget,
+      budget: userData.budget,
+    });
 
-    // Task 7: Construct Gemini AI Prompt (Enhanced with comprehensive user profile)
-  const randomSeed = Date.now();
-
-  const prompt = `You are a meal planning assistant. Based on the user's comprehensive health profile and nutritional requirements, select exactly 4 meals: one breakfast, one lunch, one dinner, and one snack.
-
-USER PROFILE ANALYSIS:
-- Age: ${userData.age || 'Not provided'} years
-- Gender: ${userData.gender || 'Not provided'}
-- Weight: ${userData.weight || 'Not provided'} kg
-- Height: ${userData.height || 'Not provided'} cm
-- Activity Level: ${userData.activityLevel || 'Not provided'}
-- Health Goal: ${userData.healthGoal || 'Not provided'}
-- BMR (Basal Metabolic Rate): ${bmr} kcal/day
-- TDEE (Total Daily Energy Expenditure): ${tdee} kcal/day
-- Target Daily Calories: ${calorieGoal} kcal (adjusted for ${userData.healthGoal})
-
-NUTRITIONAL REQUIREMENTS:
-Target Daily Calories: ${calorieGoal} kcal
-
-CALORIE DISTRIBUTION BY MEAL TYPE:
-- Breakfast: ~${Math.round(calorieGoal * 0.25)} kcal (25%)
-- Lunch: ~${Math.round(calorieGoal * 0.35)} kcal (35%)
-- Dinner: ~${Math.round(calorieGoal * 0.30)} kcal (30%)
-- Snack: ~${Math.round(calorieGoal * 0.10)} kcal (10%)
-
-MACRONUTRIENT TARGETS (Total for all 4 meals):
-- Protein: ~${proteinTarget}g (${proteinPercent * 100}% of calories)
-- Carbohydrates: ~${carbsTarget}g (${carbsPercent * 100}% of calories)
-- Fat: ~${fatTarget}g (${fatPercent * 100}% of calories)
-
-IMPORTANT: Select meals that collectively meet these calorie and macro targets.
-
-HEALTH CONDITIONS & CONSTRAINTS:
-${userData.healthConditions.includes('Diabetes') ? `- Diabetes: All meals pre-filtered for diabetic_friendly tag. Prefer lower sugar options.
-` : ''}${userData.healthConditions.includes('Hypertension') ? `- Hypertension: All meals pre-filtered for low_sodium tag. Prefer lower sodium options.
-` : ''}${userData.isVegetarian ? `- Vegetarian: All meals pre-filtered for vegetarian tag.
-` : ''}
-CRITICAL BUDGET CONSTRAINT: The total cost of all 4 selected meals MUST be under ${userData.budget} BDT. Check the cost_bdt field for each meal and ensure the sum is below ${userData.budget}.
-
-AVAILABLE MEALS (pre-filtered):
-${JSON.stringify(simplifiedMeals, null, 2)}
-
-${userData.allergies ? `NOTE: The meals listed above have been pre-filtered to exclude ingredients the user is allergic to (${userData.allergies}).
-` : ''}
-
-VARIETY & SELECTION RULES:
-1. Prioritize ingredient diversity - avoid selecting meals with too many overlapping ingredients
-2. Vary protein sources across meals (e.g., don't select 4 chicken-based meals or 4 lentil-based meals)
-3. Include a mix of traditional Bangladeshi meals and diverse options
-4. Balance between different meal tags (e.g., mix "budget_friendly" with "high_protein" meals)
-5. Random seed for this generation: ${randomSeed} - Use this to vary your selection each time
-
-IMPORTANT: Do NOT repeatedly select the same meals. Explore different combinations from the available meal database to provide variety.
-
-OUTPUT FORMAT:
-Return ONLY a JSON array of exactly 4 meal_id strings.
-
-CRITICAL SELECTION RULES - MUST FOLLOW EXACTLY:
-1. Select exactly ONE meal for Breakfast (meal_type contains "Breakfast")
-2. Select exactly ONE DIFFERENT meal for Lunch (meal_type contains "Lunch")  
-3. Select exactly ONE DIFFERENT meal for Dinner (meal_type contains "Dinner")
-4. Select exactly ONE DIFFERENT meal for Snack (meal_type contains "Snack")
-
-IMPORTANT CONSTRAINTS:
-- All 4 meals MUST be different meal_ids
-- Each meal can only be used ONCE
-- Do NOT select the same meal multiple times even if it has multiple meal_type tags
-- Total cost must be < ${userData.budget} BDT
-
-VALIDATION: The final 4 meals should give you exactly one of each meal type when displayed to the user.
-
-Example output: ["MEAL_001", "MEAL_005", "MEAL_022", "MEAL_040"]
-
-Return ONLY the JSON array with no explanation or additional text.`;
-
-    console.log(`🔵 Prompt character count: ${prompt.length}, Meals in prompt: ${simplifiedMeals.length}`);
-
-    // Task 8: Call Gemini API (with optional mock support for local testing)
-    const mockResponse = process.env.GEMINI_MOCK_RESPONSE;
-    let responseText: string;
-
-    if (mockResponse && mockResponse.trim().length > 0) {
-      responseText = mockResponse;
-    } else {
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
-        throw new Error('Gemini API key is not configured');
-      }
-
-      console.log('🔵 Calling Gemini API...');
-      const aiStartTime = Date.now();
-      
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ 
-        model: 'gemini-2.0-flash-exp',  // Use experimental flash model (free tier)
-        generationConfig: {
-          temperature: 0.5,  // Lower temperature for more focused, deterministic responses
-          maxOutputTokens: 200,  // Increased to allow AI to consider constraints better
-        }
-      });
-      const result = await model.generateContent(prompt);
-      responseText = result.response.text();
-      
-      const aiTime = Date.now() - aiStartTime;
-      console.log(`🔵 Gemini API responded in: ${aiTime}ms (${(aiTime / 1000).toFixed(2)}s)`);
+    if (!selectionResult) {
+      console.warn('⚠️ Unable to construct meal plan meeting targets.');
+      return NextResponse.json(
+        {
+          error: 'No meal combination found that satisfies calorie and budget targets. Please adjust your preferences.'
+        } as ApiError,
+        { status: 400 }
+      );
     }
 
-    // Task 9: Parse Gemini Response
-    // Clean up response text (remove markdown code blocks if present)
-    let cleanedResponse = responseText.trim();
-    if (cleanedResponse.startsWith('```json')) {
-      cleanedResponse = cleanedResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '');
-    } else if (cleanedResponse.startsWith('```')) {
-      cleanedResponse = cleanedResponse.replace(/```\n?/g, '');
-    }
-    
-    const selectedMealIds: string[] = JSON.parse(cleanedResponse);
-    
-    if (!Array.isArray(selectedMealIds)) {
-      throw new Error('Invalid response format from Gemini API');
-    }
-    
-    if (selectedMealIds.length === 0) {
-      throw new Error('No meals were selected by the AI');
-    }
+    const normalizedMeals = selectionResult.meals;
 
-    // Task 10: Filter Meals by ID
-    const selectedMeals = safeForUserMeals.filter(meal => selectedMealIds.includes(meal.meal_id));
-    
-    if (selectedMeals.length === 0) {
-      throw new Error('No valid meal plan could be generated');
-    }
+    const totalSelectedCost = selectionResult.totals.cost;
 
-    // Ensure we have exactly one meal for each required meal type
-    const requiredMealTypes: Array<'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'> = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
-    const usedMealIds = new Set<string>();
-    const mealTypeAssignments = new Map<string, Meal>();
-
-    // First, assign AI-selected meals to meal types when possible
-    for (const meal of selectedMeals) {
-      for (const mealType of meal.meal_type) {
-        if (requiredMealTypes.includes(mealType as typeof requiredMealTypes[number]) && !mealTypeAssignments.has(mealType)) {
-          mealTypeAssignments.set(mealType, meal);
-          usedMealIds.add(meal.meal_id);
-          break; // Assign each meal to at most one type
-        }
-      }
-    }
-
-    // Fallback: fill any missing meal types from eligible meals
-    for (const mealType of requiredMealTypes) {
-      if (!mealTypeAssignments.has(mealType)) {
-        const fallbackMeal = eligibleMeals
-          .filter(meal => meal.meal_type.includes(mealType) && !usedMealIds.has(meal.meal_id))
-          .sort((a, b) => a.total_cost_bdt - b.total_cost_bdt)[0];
-
-        if (!fallbackMeal) {
-          throw new Error(`Unable to find a meal for ${mealType}`);
-        }
-
-        mealTypeAssignments.set(mealType, fallbackMeal);
-        usedMealIds.add(fallbackMeal.meal_id);
-      }
-    }
-
-    const normalizedMeals = requiredMealTypes.map(type => mealTypeAssignments.get(type)!) as Meal[];
-
-    const totalSelectedCost = normalizedMeals.reduce((sum, meal) => sum + meal.total_cost_bdt, 0);
-    if (totalSelectedCost > userData.budget) {
-      console.warn('⚠️ Fallback selection exceeded budget.', { totalSelectedCost, budget: userData.budget });
-    }
-
-    console.log('🔵 AI selected meals:', selectedMealIds);
-    console.log('🔵 Meal names:', selectedMeals.map(m => m.name_en));
-
-    console.log('🔵 Final meal assignments by type:', {
-      Breakfast: normalizedMeals[0]?.meal_id,
-      Lunch: normalizedMeals[1]?.meal_id,
-      Dinner: normalizedMeals[2]?.meal_id,
-      Snack: normalizedMeals[3]?.meal_id,
-      totalCost: totalSelectedCost
+    console.log('🔵 Deterministic selection complete:', {
+      selectedMealIds: normalizedMeals.map((meal) => meal.meal_id),
+      totals: selectionResult.totals,
+      attempts: selectionResult.attempts,
+      score: selectionResult.score,
+      totalCost: totalSelectedCost,
     });
 
     // Task 11: Return Success Response
@@ -445,8 +283,20 @@ Return ONLY the JSON array with no explanation or additional text.`;
       safeForUser: safeForUserMeals.length,
       allergies: userData.allergies || 'None',
       removedCount: allMeals.length - safeForUserMeals.length,
-      selectedMealIds: selectedMealIds,
+      selectedMealIds: normalizedMeals.map((meal) => meal.meal_id),
       selectedMealNames: normalizedMeals.map(m => m.name_en),
+      totals: selectionResult.totals,
+      attempts: selectionResult.attempts,
+      score: selectionResult.score,
+      caloriePenalty: selectionResult.caloriePenalty,
+      macroPenalty: selectionResult.macroPenalty,
+      targets: {
+        calorieGoal,
+        proteinTarget,
+        carbsTarget,
+        fatTarget,
+        budget: userData.budget
+      },
       timestamp: Date.now()
     };
     
