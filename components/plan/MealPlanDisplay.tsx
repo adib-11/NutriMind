@@ -8,7 +8,7 @@ import { getMealPlan } from '@/services/apiClient';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import formatQuantity from '@/lib/formatQuantity';
-import { getIngredientImage } from '@/lib/unsplashClient';
+import { getMealImage } from '@/lib/imageClient';
 import ingredientsData from '@/data/ingredients.json';
 
 interface MealPlanDisplayProps {
@@ -53,7 +53,8 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
     const loadImages = async () => {
       const images: Record<string, string> = {};
       for (const meal of meals) {
-        images[meal.meal_id] = await getIngredientImage(meal.name_en);
+        const imageData = getMealImage(meal.meal_id, meal.name_en);
+        images[meal.meal_id] = imageData.image_url;
       }
       setMealImages(images);
     };

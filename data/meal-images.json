@@ -1,0 +1,91 @@
+{
+  "meal_images": [
+    {
+      "meal_id": "MEAL_001",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Rice with Chicken Roast and Mixed Vegetables"
+    },
+    {
+      "meal_id": "MEAL_002",
+      "image_url": "/placeholders/protein.jpg",
+      "alt_text": "Rice with Fried Hilsa Fish and Vegetable Curry"
+    },
+    {
+      "meal_id": "MEAL_003",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Rice with Lentils and Egg Curry"
+    },
+    {
+      "meal_id": "MEAL_004",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Scrambled Eggs with Roti"
+    },
+    {
+      "meal_id": "DEFAULT_GRAIN",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Rice and grain dishes"
+    },
+    {
+      "meal_id": "DEFAULT_PROTEIN",
+      "image_url": "/placeholders/protein.jpg",
+      "alt_text": "Protein dishes"
+    },
+    {
+      "meal_id": "DEFAULT_VEGETABLE",
+      "image_url": "/placeholders/vegetable.jpg",
+      "alt_text": "Vegetable dishes"
+    },
+    {
+      "meal_id": "DEFAULT_DAIRY",
+      "image_url": "/placeholders/dairy.jpg",
+      "alt_text": "Dairy products"
+    },
+    {
+      "meal_id": "DEFAULT_FRUIT",
+      "image_url": "/placeholders/fruit.jpg",
+      "alt_text": "Fruits"
+    },
+    {
+      "meal_id": "DEFAULT",
+      "image_url": "/placeholders/generic-food.jpg",
+      "alt_text": "Food"
+    }
+  ],
+  "ingredient_images": [
+    {
+      "ingredient_id": "ING_001",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Rice"
+    },
+    {
+      "ingredient_id": "ING_002",
+      "image_url": "/placeholders/protein.jpg",
+      "alt_text": "Chicken"
+    },
+    {
+      "ingredient_id": "DEFAULT_GRAIN",
+      "image_url": "/placeholders/grain.jpg",
+      "alt_text": "Grain"
+    },
+    {
+      "ingredient_id": "DEFAULT_PROTEIN",
+      "image_url": "/placeholders/protein.jpg",
+      "alt_text": "Protein"
+    },
+    {
+      "ingredient_id": "DEFAULT_VEGETABLE",
+      "image_url": "/placeholders/vegetable.jpg",
+      "alt_text": "Vegetable"
+    },
+    {
+      "ingredient_id": "DEFAULT_DAIRY",
+      "image_url": "/placeholders/dairy.jpg",
+      "alt_text": "Dairy"
+    },
+    {
+      "ingredient_id": "DEFAULT",
+      "image_url": "/placeholders/generic-food.jpg",
+      "alt_text": "Food"
+    }
+  ]
+}

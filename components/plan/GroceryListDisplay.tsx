@@ -7,7 +7,7 @@ import { type Meal, type Ingredient } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ingredientsData from '@/data/ingredients.json';
 import formatQuantity from '@/lib/formatQuantity';
-import { getIngredientImage } from '@/lib/unsplashClient';
+import { getIngredientImage } from '@/lib/imageClient';
 
 interface GroceryListDisplayProps {
   meals: Meal[];
@@ -120,7 +120,8 @@ export default function GroceryListDisplay({ meals }: GroceryListDisplayProps) {
     const loadIcons = async () => {
       const icons: Record<string, string> = {};
       for (const item of aggregatedIngredients) {
-        icons[item.ingredient.ingredient_id] = await getIngredientImage(item.ingredient.name_en);
+        const imageData = getIngredientImage(item.ingredient.ingredient_id, item.ingredient.name_en);
+        icons[item.ingredient.ingredient_id] = imageData.image_url;
       }
       setIngredientIcons(icons);
     };
