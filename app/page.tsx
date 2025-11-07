@@ -61,6 +61,49 @@ export default function Home() {
               </p>
             </div>
           </div>
+
+          {/* AI Assistant Showcase Section */}
+          <div className="pt-12 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 shadow-lg border border-green-200">
+              <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
+                {/* Icon Section */}
+                <div className="flex-shrink-0">
+                  <div className="text-6xl md:text-8xl">🤖</div>
+                </div>
+
+                {/* Content Section */}
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    AI Nutrition Assistant
+                  </h2>
+                  <p className="text-lg text-gray-700 mb-4">
+                    Get instant help with your meal plan! Our AI assistant can:
+                  </p>
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-start justify-center md:justify-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-gray-700">Replace individual meals</span>
+                    </li>
+                    <li className="flex items-start justify-center md:justify-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-gray-700">Answer nutrition questions</span>
+                    </li>
+                    <li className="flex items-start justify-center md:justify-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-gray-700">Suggest alternatives</span>
+                    </li>
+                    <li className="flex items-start justify-center md:justify-start">
+                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-gray-700">Explain nutritional content</span>
+                    </li>
+                  </ul>
+                  <p className="text-sm text-gray-600 italic">
+                    💬 Available on your meal plan page - just click the chatbot icon!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
