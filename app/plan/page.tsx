@@ -116,15 +116,15 @@ export default function MealPlanPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <p className="text-sm text-gray-600">BMR (Base Metabolism)</p>
-                  <p className="text-2xl font-bold text-blue-600">{calculations.bmr} kcal/day</p>
+                  <p className="text-2xl font-bold text-blue-600">{calculations.bmr} Calories/day</p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <p className="text-sm text-gray-600">TDEE (With Activity)</p>
-                  <p className="text-2xl font-bold text-blue-600">{calculations.tdee} kcal/day</p>
+                  <p className="text-2xl font-bold text-blue-600">{calculations.tdee} Calories/day</p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <p className="text-sm text-gray-600">Daily Target (For Goal)</p>
-                  <p className="text-2xl font-bold text-green-600">{calculations.calorieGoal} kcal/day</p>
+                  <p className="text-2xl font-bold text-green-600">{calculations.calorieGoal} Calories/day</p>
                 </div>
               </div>
               <div className="mt-4 bg-white p-4 rounded-lg shadow-sm">

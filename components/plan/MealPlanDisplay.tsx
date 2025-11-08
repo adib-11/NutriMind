@@ -261,7 +261,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-gray-600">Calories</p>
-                  <p className="text-lg font-semibold text-gray-900">{meal.total_nutrition.calories} kcal</p>
+                  <p className="text-lg font-semibold text-gray-900">{meal.total_nutrition.calories} cal</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Cost</p>
@@ -302,7 +302,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm text-gray-600">Total Calories</p>
-              <p className="text-3xl font-bold text-gray-900">{totalCalories} kcal</p>
+              <p className="text-3xl font-bold text-gray-900">{totalCalories} cal</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Cost</p>
