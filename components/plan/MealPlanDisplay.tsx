@@ -27,9 +27,35 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
   const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
   const allIngredients = ingredientsDataImport.ingredients;
 
-  // Calculate totals
+  // Helper function to calculate actual ingredient cost for a meal
+  const calculateMealIngredientCost = (meal: Meal): number => {
+    if (!meal.ingredients || meal.ingredients.length === 0) {
+      return meal.total_cost_bdt; // Fallback to stored cost if no ingredients
+    }
+
+    return meal.ingredients.reduce((sum, mealIngredient) => {
+      const ingredientDetails = allIngredients.find(
+        (ing) => ing.ingredient_id === mealIngredient.ingredient_id
+      );
+      
+      if (!ingredientDetails) return sum;
+
+      let quantity = mealIngredient.quantity;
+      
+      // Convert to base unit if needed for cost calculation
+      if (ingredientDetails.unit === 'kg' && mealIngredient.unit === 'g') {
+        quantity = mealIngredient.quantity / 1000;
+      } else if (ingredientDetails.unit === 'litre' && mealIngredient.unit === 'ml') {
+        quantity = mealIngredient.quantity / 1000;
+      }
+
+      return sum + (quantity * ingredientDetails.price_bdt_per_unit);
+    }, 0);
+  };
+
+  // Calculate totals using actual ingredient costs
   const totalCalories = meals.reduce((sum, meal) => sum + meal.total_nutrition.calories, 0);
-  const totalCost = meals.reduce((sum, meal) => sum + meal.total_cost_bdt, 0);
+  const totalCost = meals.reduce((sum, meal) => sum + calculateMealIngredientCost(meal), 0);
 
   // Determine intended meal type based on position (AI returns in order: Breakfast, Lunch, Dinner, Snack)
   const getIntendedMealType = (meal: Meal, index: number): string => {
@@ -175,6 +201,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {meals.map((meal, index) => {
           const intendedMealType = getIntendedMealType(meal, index);
+          const mealIngredientCost = calculateMealIngredientCost(meal);
           return (
           <Card key={meal.meal_id} className="border-gray-200 overflow-hidden">
             {/* Meal Image */}
@@ -238,7 +265,7 @@ export default function MealPlanDisplay({ meals }: MealPlanDisplayProps) {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Cost</p>
-                  <p className="text-lg font-semibold text-green-600">৳{meal.total_cost_bdt.toFixed(2)}</p>
+                  <p className="text-lg font-semibold text-green-600">৳{mealIngredientCost.toFixed(2)}</p>
                 </div>
               </div>
 

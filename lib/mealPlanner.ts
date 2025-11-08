@@ -1,8 +1,38 @@
-import { type Meal } from '@/types';
+import { type Meal, type Ingredient } from '@/types';
+import ingredientsData from '@/data/ingredients.json';
 
 type MealType = 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
 
 const REQUIRED_MEAL_TYPES: MealType[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+
+// Load ingredients data for cost calculation
+const ingredientsDataImport = ingredientsData as { ingredients: Ingredient[] };
+const allIngredients: Ingredient[] = ingredientsDataImport.ingredients;
+const ingredientMap = new Map(allIngredients.map((ing) => [ing.ingredient_id, ing]));
+
+// Helper function to calculate actual ingredient cost for a meal
+function calculateMealIngredientCost(meal: Meal): number {
+  if (!meal.ingredients || meal.ingredients.length === 0) {
+    return meal.total_cost_bdt; // Fallback to stored cost if no ingredients
+  }
+
+  return meal.ingredients.reduce((sum, mealIngredient) => {
+    const ingredientDetails = ingredientMap.get(mealIngredient.ingredient_id);
+    
+    if (!ingredientDetails) return sum;
+
+    let quantity = mealIngredient.quantity;
+    
+    // Convert to base unit if needed for cost calculation
+    if (ingredientDetails.unit === 'kg' && mealIngredient.unit === 'g') {
+      quantity = mealIngredient.quantity / 1000;
+    } else if (ingredientDetails.unit === 'litre' && mealIngredient.unit === 'ml') {
+      quantity = mealIngredient.quantity / 1000;
+    }
+
+    return sum + (quantity * ingredientDetails.price_bdt_per_unit);
+  }, 0);
+}
 
 interface MacroTargets {
   calorieGoal: number;
@@ -41,12 +71,13 @@ const DEFAULT_MAX_CALORIE_DEVIATION = 0.12; // 12%
 function sumTotals(meals: Meal[]): MealTotals {
   return meals.reduce<MealTotals>((acc, meal) => {
     const nutrition = meal.total_nutrition;
+    const mealCost = calculateMealIngredientCost(meal); // Use calculated ingredient cost
     return {
       calories: acc.calories + (nutrition?.calories || 0),
       protein: acc.protein + (nutrition?.protein_g || 0),
       carbs: acc.carbs + (nutrition?.carbs_g || 0),
       fat: acc.fat + (nutrition?.fat_g || 0),
-      cost: acc.cost + (meal.total_cost_bdt || 0),
+      cost: acc.cost + mealCost,
     };
   }, { calories: 0, protein: 0, carbs: 0, fat: 0, cost: 0 });
 }
@@ -88,13 +119,18 @@ function createCandidateBuckets(
     }
 
     buckets[mealType] = buckets[mealType]
-      .filter((meal) => meal.total_cost_bdt > 0 && meal.total_nutrition?.calories > 0)
+      .filter((meal) => {
+        const mealCost = calculateMealIngredientCost(meal);
+        return mealCost > 0 && meal.total_nutrition?.calories > 0;
+      })
       .sort((a, b) => {
         const caloriesDiff = (b.total_nutrition?.calories || 0) - (a.total_nutrition?.calories || 0);
         if (caloriesDiff !== 0) {
           return caloriesDiff;
         }
-        return (a.total_cost_bdt || 0) - (b.total_cost_bdt || 0);
+        const costA = calculateMealIngredientCost(a);
+        const costB = calculateMealIngredientCost(b);
+        return costA - costB;
       })
       .slice(0, candidateLimitPerType);
 
@@ -137,17 +173,17 @@ export function selectMealPlan(
   const snackMeals = buckets.Snack;
 
   for (const breakfast of breakfastMeals) {
-    const breakfastCost = breakfast.total_cost_bdt || 0;
+    const breakfastCost = calculateMealIngredientCost(breakfast);
     if (breakfastCost > budget) continue;
 
     for (const lunch of lunchMeals) {
       if (lunch.meal_id === breakfast.meal_id) continue;
-      const costBL = breakfastCost + (lunch.total_cost_bdt || 0);
+      const costBL = breakfastCost + calculateMealIngredientCost(lunch);
       if (costBL > budget) continue;
 
       for (const dinner of dinnerMeals) {
         if (dinner.meal_id === breakfast.meal_id || dinner.meal_id === lunch.meal_id) continue;
-        const costBLD = costBL + (dinner.total_cost_bdt || 0);
+        const costBLD = costBL + calculateMealIngredientCost(dinner);
         if (costBLD > budget) continue;
 
         for (const snack of snackMeals) {
