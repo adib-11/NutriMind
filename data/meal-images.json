@@ -21,6 +21,26 @@
       "alt_text": "Scrambled Eggs with Roti"
     },
     {
+      "meal_id": "MEAL_019",
+      "image_url": "/meals/Masoor Dal (Lentil Soup) with Roti .webp",
+      "alt_text": "Masoor Dal (Lentil Soup) with Roti (2)"
+    },
+    {
+      "meal_id": "MEAL_102",
+      "image_url": "/meals/White Rice, Beef Bhuna, Mung Dal, Aloo Bhorta.png",
+      "alt_text": "White Rice, Beef Bhuna, Mung Dal, Aloo Bhorta"
+    },
+    {
+      "meal_id": "MEAL_107",
+      "image_url": "/meals/Chicken Fried Rice, Chili Chicken (Gravy), Wonton (2pcs).png",
+      "alt_text": "Chicken Fried Rice, Chili Chicken (Gravy), Wonton (2pcs)"
+    },
+    {
+      "meal_id": "MEAL_159",
+      "image_url": "/meals/Student Meal Instant Noodles (2 pack) with 2 Eggs.png",
+      "alt_text": "Student Meal: Instant Noodles (2 pack) with 2 Eggs"
+    },
+    {
       "meal_id": "DEFAULT_GRAIN",
       "image_url": "/placeholders/grain.jpg",
       "alt_text": "Rice and grain dishes"
